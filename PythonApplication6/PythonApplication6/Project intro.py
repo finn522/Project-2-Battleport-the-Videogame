@@ -12,8 +12,8 @@ def process_events():
 
 # Main program logic
 def program():
-    width = 1680
-    height = 980
+    width = 1280
+    height = 720
     size = (width, height)
     
     # Start PyGame
@@ -21,8 +21,9 @@ def program():
     
     # Set the resolution
     Background = pygame.image.load("Background.jpg")
+    Background = pygame.transform.scale(Background, (1280, 720))
     screen = pygame.display.set_mode(size)
-    screen.blit(Background,(-150, 0))
+    screen.blit(Background,(0, 0))
 
     while not process_events():   
         
