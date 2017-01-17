@@ -3,4 +3,4 @@ Repository for Project 2: Making a videogame
 BLA LA BJSDKJPOASDasd
 
 
-Simon is de grootste droeftoeter die ik ken
+Simon is de grootste droeftoeterrrrrrrrr die ik ken
