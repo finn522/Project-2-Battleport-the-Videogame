@@ -1,0 +1,12 @@
+# Beginscherm van de Tutorial
+"Welkom bij de Tutorial van Battleport - Where ships collide."
+
+
+# Tekst voor tijdens de tutorial
+"Begin uw beurt met het pakken van twee kaarten."
+"Plaats nu om de beurt één schip. Deze moet met tenminste 1 vakje aan je eigen haven grenzen."
+
+
+"Dit is de aanvalspositie van het schip. Dit wordt ook wel de standaardpositie genoemd."
+
+
