@@ -3,6 +3,7 @@
 
 import pygame
 import sys
+import math
 
 green = (0, 255, 0)
 red = (255, 0, 0)
@@ -12,10 +13,10 @@ class Intro:
     def __init__ (self, width, height):
         self.Background = pygame.image.load("Background.jpg")
         self.Background = pygame.transform.scale(self.Background, (width, height))
-        self.exit_button = Button('Exit', (width/10), (height/1.25), 170, 50)
-        self.tutorial_button = Button('Tutorial', (width/10), (height/1.4), 170, 50)
-        self.highscore_button = Button('Highscore', (width/10), (height/1.6), 170, 50)
-        self.start_button = Button('Start', (width/10), (height/1.86), 170, 50)
+        self.exit_button = Button('Exit', (width/15), (height/1.25), 170, 50)
+        self.tutorial_button = Button('Tutorial', (width/15), (height/1.4), 170, 50)
+        self.highscore_button = Button('Highscore', (width/15), (height/1.6), 170, 50)
+        self.start_button = Button('Start', (width/15), (height/1.86), 170, 50)
     def update (self):
         pass
     def draw (self, screen):
@@ -31,10 +32,14 @@ class Button:
         self.x = x
         self.y = y
         self.surface = pygame.Surface((w, h))
+        self.font = pygame.font.Font(None, 45)
+        
     def update(self):
-        pass
+        pass      
     def draw (self, screen):
         screen.blit(self.surface, (self.x, self.y))
+        button_text = self.font.render(self.text, 1, (255,120,0))
+        screen.blit(button_text,(self.x, self.y))
         
 # Handle pygame events
 def process_events():
@@ -54,7 +59,7 @@ def program():
     
     # Set the resolution
     screen = pygame.display.set_mode(size)
-
+    
     intro = Intro(width, height) 
     
     while not process_events():   
