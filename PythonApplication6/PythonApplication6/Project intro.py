@@ -51,8 +51,7 @@ class Button:
             screen.blit(self.surface, (self.x, self.y))
             button_text = self.font.render(self.text, 1, (255,120,0))
             screen.blit(button_text,(( self.x + 5), (self.y + 11) ))
-
-        
+                
 # Handle pygame events
 def process_events():
     for event in pygame.event.get():
@@ -110,4 +109,3 @@ def program():
 
 # Start the program
 program()
-
