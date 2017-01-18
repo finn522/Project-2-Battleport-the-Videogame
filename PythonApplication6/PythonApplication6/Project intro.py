@@ -8,21 +8,40 @@ green = (0, 255, 0)
 red = (255, 0, 0)
 blue = (0, 64, 128)
 
+class Intro:
+    def __init__ (self, width, height):
+        self.Background = pygame.image.load("Background.jpg")
+        self.Background = pygame.transform.scale(self.Background, (width, height))
+        self.exit_button = Button('Exit', (width/10), (height/1.25), 170, 50)
+        self.tutorial_button = Button('Tutorial', (width/10), (height/1.4), 170, 50)
+        self.highscore_button = Button('Highscore', (width/10), (height/1.6), 170, 50)
+        self.start_button = Button('Start', (width/10), (height/1.86), 170, 50)
+    def update (self):
+        pass
+    def draw (self, screen):
+        screen.blit(self.Background,(0, 0))
+        self.exit_button.draw(screen)
+        self.tutorial_button.draw(screen)
+        self.highscore_button.draw(screen)
+        self.start_button.draw(screen) 
 
+class Button:
+    def __init__(self, text, x, y, w, h):
+        self.text = text
+        self.x = x
+        self.y = y
+        self.surface = pygame.Surface((w, h))
+    def update(self):
+        pass
+    def draw (self, screen):
+        screen.blit(self.surface, (self.x, self.y))
+        
 # Handle pygame events
 def process_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
            sys.exit()
-def mouse(x,y,w,h, button, screen):
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-    if x + w > mouse[0] > x and y + h > mouse[0] > y:
-        button.set_alpha(550)
-        screen.blit(button,(x, y))
-    else: 
-        button.set_alpha(150)   
-        screen.blit(button,(x, y))
+
     
 # Main program logic
 def program():
@@ -34,16 +53,20 @@ def program():
     pygame.init()
     
     # Set the resolution
-    Background = pygame.image.load("Background.jpg")
-    Background = pygame.transform.scale(Background, (size))
     screen = pygame.display.set_mode(size)
-    screen.blit(Background,(0, 0))
- 
-    xmouse, ymouse = pygame.mouse.get_pos()
+
+    intro = Intro(width, height) 
+    
+    while not process_events():   
+        intro.draw(screen)
+        # Flip the screen
+        pygame.display.flip()
+"""    mouse = pygame.mouse.get_pos()
+       
     x = width/10
     y = height/1.25
     exit_button = pygame.Surface((170, 50))
-    if x + 170 > xmouse > x and y + 50 > ymouse > y:
+    if x + 170 > mouse[0] > x and y + 50 > mouse[1] > y:
         exit_button.set_alpha(500)
         screen.blit(exit_button,(x, y))
     else: 
@@ -64,11 +87,8 @@ def program():
     start_button = pygame.Surface((170, 50))
     start_button.set_alpha(150)
     screen.blit(start_button,(x, y))
+"""
 
-    while not process_events():   
-        
-        # Flip the screen
-        pygame.display.flip()
 
 
 # Start the program
