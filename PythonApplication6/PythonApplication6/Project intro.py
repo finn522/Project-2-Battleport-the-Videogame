@@ -36,8 +36,12 @@ class Button:
         self.text = text
         self.x = x
         self.y = y
+        self.w = w
+        self.h = h
         self.surface = pygame.Surface((w, h))
         self.font = pygame.font.Font(None, 45)
+        self.width = 1280
+        self.heigth = 720
     def update(self):
         pass      
     def draw (self, screen):
@@ -47,10 +51,35 @@ class Button:
             screen.blit(self.surface, (self.x, self.y))
             button_text = self.font.render(self.text, 1, (255,255,255))
             screen.blit(button_text,(( self.x + 5), (self.y + 11) ))
+            if click[0]:
+                print (self.text)
+                if self.text == 'Start':
+                    start_game = Game(self.width, self.heigth).draw(screen)
+                elif self.text == 'Tutorial':
+                    pass
+                elif self.text == 'Highscore':
+                    pass
+                elif self.text == 'Exit':
+                    sys.exit()
         else:
             screen.blit(self.surface, (self.x, self.y))
             button_text = self.font.render(self.text, 1, (255,120,0))
             screen.blit(button_text,(( self.x + 5), (self.y + 11) ))
+
+class Game:
+    def __init__ (self, width, height):
+        self.Background = pygame.image.load("Background.jpg")
+        self.Background = pygame.transform.scale(self.Background, (width, height))
+        self.font = pygame.font.SysFont('Arial', 150)
+        self.width = width
+        self.height = height
+    def update (self):
+        pass
+    def draw (self, screen):
+        screen.blit(self.Background,(0, 0))
+        title_text = self.font.render("Game start", 1, (255,120,0))
+        screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
+
                 
 # Handle pygame events
 def process_events():
@@ -72,40 +101,11 @@ def program():
     screen = pygame.display.set_mode(size)
     
     intro = Intro(width, height) 
-    
+  
     while not process_events():   
         intro.draw(screen)
         # Flip the screen
         pygame.display.flip()
-"""    mouse = pygame.mouse.get_pos()
-       
-    x = width/10
-    y = height/1.25
-    exit_button = pygame.Surface((170, 50))
-    if x + 170 > mouse[0] > x and y + 50 > mouse[1] > y:
-        exit_button.set_alpha(500)
-        screen.blit(exit_button,(x, y))
-    else: 
-        exit_button.set_alpha(150)   
-        screen.blit(exit_button,(x, y))
-    
-    y = height/1.4
-    tutorial_button = pygame.Surface((170, 50))
-    tutorial_button.set_alpha(150)
-    screen.blit(tutorial_button,(x, y))
-
-    y = height/1.6
-    highscore_button = pygame.Surface((170, 50))
-    highscore_button.set_alpha(150)
-    screen.blit(highscore_button,(x, y))
-
-    y = height/1.86
-    start_button = pygame.Surface((170, 50))
-    start_button.set_alpha(150)
-    screen.blit(start_button,(x, y))
-"""
-
-
 
 # Start the program
 program()
