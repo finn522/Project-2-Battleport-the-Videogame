@@ -28,6 +28,7 @@ class Application:
         self.intro = Intro(self, self.width, self.height)
         self.game = Game(self, self.width, self.height)
         self.highscore = Highscore(self, self.width, self.height)
+        self.tutorial = Tutorial(self, self.width, self.height)
 
     def application_loop(self):
         while not process_events():
@@ -37,6 +38,8 @@ class Application:
                 self.game.draw(self.screen)
             elif self.phase == 'Highscore':
                 self.highscore.draw(self.screen) 
+            elif self.phase == 'Tutorial':
+                self.tutorial.draw(self.screen)
             # Flip the screen
             pygame.display.flip()
 
@@ -83,10 +86,9 @@ class Button:
             if mouse_click[0]:
                 print (self.text)
                 if self.text == 'Start':
-                    # start_game = Game(self.width, self.heigth).draw(screen)
                     self.application.phase = "game"
                 elif self.text == 'Tutorial':
-                    pass
+                    self.application.phase = 'Tutorial'
                 elif self.text == 'Highscore':
                     self.application.phase = "Highscore"
                 elif self.text == 'Exit':
@@ -120,6 +122,19 @@ class Highscore:
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Highscore", 1, (255,120,0))
+        screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
+
+class Tutorial:
+    def __init__ (self, application, width, height):
+        self.application = application
+        self.Background = pygame.image.load("BackgroundA.jpg")
+        self.Background = pygame.transform.scale(self.Background, (width, height))
+        self.font = pygame.font.SysFont('Arial', 150)
+        self.width = width
+        self.height = height 
+    def draw (self, screen):
+        screen.blit(self.Background,(0,0))
+        title_text = self.font.render("Tutorial", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
               
                 
