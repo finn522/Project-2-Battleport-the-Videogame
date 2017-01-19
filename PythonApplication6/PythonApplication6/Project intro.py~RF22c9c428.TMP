@@ -47,9 +47,6 @@ class Application:
             elif self.phase == 'Tutorial':
                 self.tutorial.draw(self.screen)
             pygame.display.flip()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
 
 class Intro:
     def __init__ (self, application, width, height):
@@ -121,62 +118,23 @@ class Game:
         self.width = width
         self.height = height
         
-        # Buttons ship actions
-        self.Ship1Move      = Button(self.application, '', (width/70), (height/22.80), 55, 55)
-        self.Ship1Def       = Button(self.application, '', (width/70), (height/7.300), 55, 55)
-        self.Ship1Att       = Button(self.application, '', (width/70), (height/4.300), 55, 55)
-        self.Ship2Move      = Button(self.application, '', (width/70), (height/2.580), 55, 55)
-        self.Ship2Def       = Button(self.application, '', (width/75), (height/2.075), 55, 55)
-        self.Ship2Att       = Button(self.application, '', (width/75), (height/1.739), 55, 55)
-        self.Ship3Move      = Button(self.application, '', (width/75), (height/1.395), 55, 55)
-        self.Ship3Def       = Button(self.application, '', (width/75), (height/1.233), 55, 55)
-        self.Ship3Att       = Button(self.application, '', (width/75), (height/1.105), 55, 55)
+        self.Ship1Move = Button(self.application, '', (width/70), (height/22.80), 55, 55)
+        self.Ship1Def  = Button(self.application, '', (width/70), (height/7.300), 55, 55)
+        self.Ship1Att  = Button(self.application, '', (width/70), (height/4.300), 55, 55)
 
-        self.BAttPoint1     = Button(self.application, '', (width/12), (height/4.400), 62, 62)
-        self.BMovePoint1    = Button(self.application, '', (width/7 ), (height/4.400), 62, 62)
-        self.BAttPoint2     = Button(self.application, '', (width/12), (height/1.750), 62, 62)
-        self.BMovePoint2    = Button(self.application, '', (width/7 ), (height/1.750), 62, 62)
-        self.BAttPoint3     = Button(self.application, '', (width/12), (height/1.110), 62, 62)
-        self.BMovePoint3    = Button(self.application, '', (width/7 ), (height/1.110), 62, 62)
+        self.Ship2Move = Button(self.application, '', (width/70), (height/2.580), 55, 55)
+        self.Ship2Def  = Button(self.application, '', (width/75), (height/2.075), 55, 55)
+        self.Ship2Att  = Button(self.application, '', (width/75), (height/1.739), 55, 55)
 
-        # Sprites Lifepoints
-        self.Battleship     = pygame.image.load("BattleshipSprite.png")
-        self.Battleship     = pygame.transform.scale(self.Battleship, (int(width / 7), int(height / 7)))
-        self.Destroyer      = pygame.image.load("DestroyerSprite.png")
-        self.Destroyer      = pygame.transform.scale(self.Destroyer, (int(width / 7), int(height / 7)))
-        self.Gunboat        = pygame.image.load("GunboatSprite.png")
-        self.Gunboat        = pygame.transform.scale(self.Gunboat, (int(width / 7), int(height / 7)))
+        self.Ship3Move = Button(self.application, '', (width/75), (height/1.395), 55, 55)
+        self.Ship3Def  = Button(self.application, '', (width/75), (height/1.233), 55, 55)
+        self.Ship3Att  = Button(self.application, '', (width/75), (height/1.105), 55, 55)
         
-        # Sprites Attack & Movepoints
-        self.AttPoint1      = pygame.image.load("AttackPoint.png")
-        self.AttPoint1      = pygame.transform.scale(self.AttPoint1, (62, 62))
-        self.MovePoint1     = pygame.image.load("Movepoint.png")
-        self.MovePoint1     = pygame.transform.scale(self.MovePoint1, (62, 62))
-        self.AttPoint2      = pygame.image.load("AttackPoint.png")
-        self.AttPoint2      = pygame.transform.scale(self.AttPoint2, (62, 62))
-        self.MovePoint2     = pygame.image.load("Movepoint.png")
-        self.MovePoint2     = pygame.transform.scale(self.MovePoint2, (62, 62))
-        self.AttPoint3      = pygame.image.load("AttackPoint.png")
-        self.AttPoint3      = pygame.transform.scale(self.AttPoint3, (62, 62))
-        self.MovePoint3     = pygame.image.load("Movepoint.png")
-        self.MovePoint3     = pygame.transform.scale(self.MovePoint3, (62, 62))
+        self.AttPoint  = pygame.image.load("AttackPoint.png")
+        self.AttPoint  = pygame.transform.scale(self.AttPoint, (55, 55)
 
     def draw (self, screen):
         screen.blit(self.Background, (0,0))
-
-        # Screen blit Attack & Movepoints
-        screen.blit(self.AttPoint1, (self.width/12, self.height/4.400))
-        screen.blit(self.MovePoint1, (self.width/7, self.height/4.400))
-        screen.blit(self.AttPoint2, (self.width/12, self.height/1.750))
-        screen.blit(self.MovePoint2, (self.width/7, self.height/1.750))
-        screen.blit(self.AttPoint3, (self.width/12, self.height/1.110))
-        screen.blit(self.MovePoint3, (self.width/7, self.height/1.110))
-
-        # Screen blit life sprites
-        screen.blit(self.Battleship, (80,500))
-        screen.blit(self.Destroyer, (80,235))
-        screen.blit(self.Gunboat, (80,23))
-
         keys = pygame.key.get_pressed()
         if keys[pygame.K_BACKSPACE]:
             self.application.phase = "pause"
