@@ -27,6 +27,7 @@ class Application:
 
         self.intro = Intro(self, self.width, self.height)
         self.game = Game(self, self.width, self.height)
+        self.highscore = Highscore(self, self.width, self.height)
 
     def application_loop(self):
         while not process_events():
@@ -34,13 +35,15 @@ class Application:
                 self.intro.draw(self.screen)
             elif self.phase == "game":
                 self.game.draw(self.screen)
+            elif self.phase == 'Highscore':
+                self.highscore.draw(self.screen) 
             # Flip the screen
             pygame.display.flip()
 
 class Intro:
     def __init__ (self, application, width, height):
         self.application = application
-        self.Background = pygame.image.load("BackgroundA.jpg")#easteregg
+        self.Background = pygame.image.load("BackgroundA.jpg") #easteregg
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.exit_button = Button(self.application, 'Exit', (width/15), (height/1.25), 170, 50)
@@ -85,7 +88,7 @@ class Button:
                 elif self.text == 'Tutorial':
                     pass
                 elif self.text == 'Highscore':
-                    pass
+                    self.application.phase = "Highscore"
                 elif self.text == 'Exit':
                     sys.exit()
         else:
@@ -106,6 +109,19 @@ class Game:
         title_text = self.font.render("Game start", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
 
+class Highscore:
+    def __init__ (self, application, width, height):
+        self.application = application
+        self.Background = pygame.image.load("BackgroundA.jpg")
+        self.Background = pygame.transform.scale(self.Background, (width, height))
+        self.font = pygame.font.SysFont('Arial', 150)
+        self.width = width
+        self.height = height 
+    def draw (self, screen):
+        screen.blit(self.Background,(0,0))
+        title_text = self.font.render("Highscore", 1, (255,120,0))
+        screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
+              
                 
 # Handle pygame events
 def process_events():
