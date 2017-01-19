@@ -12,24 +12,27 @@ class Application:
         self.height = 720
         self.size = (self.width, self.height)
     
-        # Start PyGame
         pygame.init()
     
-        # Set the resolution
         self.screen = pygame.display.set_mode((self.size))#, pygame.FULLSCREEN)
-    
         self.phase = "intro"
-
         self.intro = Intro(self, self.width, self.height)
         self.game = Game(self, self.width, self.height)
         self.highscore = Highscore(self, self.width, self.height)
         self.tutorial = Tutorial(self, self.width, self.height)
+        self.pause = Pause(self, self.width, self.height)
 
     def back(self):
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_BACKSPACE:
                     self.application.phase = "intro"
+    
+    def exit(self):
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    self.application.phase = "pause"
 
     def application_loop(self):
         while not process_events():
@@ -43,7 +46,6 @@ class Application:
                 self.highscore.draw(self.screen) 
             elif self.phase == 'Tutorial':
                 self.tutorial.draw(self.screen)
-            # Flip the screen
             pygame.display.flip()
 
 class Intro:
@@ -58,6 +60,7 @@ class Intro:
         self.start_button = Button(self.application, 'Start', (width/15), (height/1.86), 170, 50)
         self.width = width
         self.height = height
+
     def draw (self, screen):
         screen.blit(self.Background,(0, 0))
         title_text = self.font.render("BattlePort", 1, (255,120,0))
@@ -77,6 +80,7 @@ class Button:
         self.h = h
         self.surface = pygame.Surface((w, h))
         self.font = pygame.font.Font(None, 45)
+
     def draw (self, screen):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
@@ -88,12 +92,14 @@ class Button:
                 print (self.text)
                 if self.text == 'Start':
                     self.application.phase = "game"
-                elif self.text == 'Pause':
-                    self.application.phase = "pause"
                 elif self.text == 'Tutorial':
                     self.application.phase = 'Tutorial'
                 elif self.text == 'Highscore':
                     self.application.phase = "Highscore"
+                elif self.text == '  Yes':
+                    self.application.phase = "intro"
+                elif self.text == '   No':
+                    self.application.phase = "game"
                 elif self.text == 'Exit':
                     sys.exit()
         else:
@@ -124,23 +130,29 @@ class Game:
         self.Ship3Def  = Button(self.application, '', (width/75), (height/1.233), 55, 55)
         self.Ship3Att  = Button(self.application, '', (width/75), (height/1.105), 55, 55)
 
-        self.Yes = Button(self.application, 'Yes', (self.width/50), (self.height/22.80), 55, 55)
-        self.No  = Button(self.application, 'No', (self.width/50), (self.height/7.300), 55, 55)
-
     def draw (self, screen):
         screen.blit(self.Background, (0,0))
-        
         keys = pygame.key.get_pressed()
         if keys[pygame.K_BACKSPACE]:
-            Pause.draw(self, screen)
+            self.application.phase = "pause"
+        Application.exit(self)
         
 class Pause:
     def __init__ (self, application, width, height):
         self.application = application
         self.width = width
         self.height = height
+        self.font = pygame.font.SysFont('arial', 150)
+        self.font1 = pygame.font.SysFont('arial', 50)
+
+        self.Yes = Button(self.application, '  Yes', (self.width/2.75), (self.height/1.7), 100, 55)
+        self.No  = Button(self.application, '   No', (self.width/1.82), (self.height/1.7), 100, 55)
         
     def draw(self, screen):
+        title_text = self.font.render("Pause", 1, (255,120,0))
+        screen.blit(title_text,((self.width / 2.8) , (self.height / 6)))
+        title_text1 = self.font1.render("Do you want to quit the game?", 1, (255,120,0))
+        screen.blit(title_text1,((self.width / 3.5) , (self.height / 2.5)))
         self.Yes.draw(screen)
         self.No.draw(screen)  
         
@@ -152,6 +164,7 @@ class Highscore:
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height 
+
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Highscore", 1, (255,120,0))
@@ -166,26 +179,20 @@ class Tutorial:
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height 
+
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Tutorial", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         Application.back(self)
           
-                
-# Handle pygame events
 def process_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-        elif event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                sys.exit()
 
-# Main program logic
 def program():
     application = Application()
     application.application_loop()
 
-# Start the program
 program()
