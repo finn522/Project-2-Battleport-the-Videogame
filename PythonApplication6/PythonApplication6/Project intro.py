@@ -2,8 +2,10 @@
 # Simon de Bakker, Raoul van Duivenvoorde, Jeroen de Schepper
 
 import pygame
+from pygame.locals import*
 import sys
 import math
+
 
 green = (0, 255, 0)
 red = (255, 0, 0)
@@ -11,7 +13,7 @@ blue = (0, 64, 128)
 
 class Intro:
     def __init__ (self, width, height):
-        self.Background = pygame.image.load("Background.jpg")
+        self.Background = pygame.image.load("BackgroundA.jpg")#easteregg
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.exit_button = Button('Exit', (width/15), (height/1.25), 170, 50)
@@ -29,7 +31,7 @@ class Intro:
         self.exit_button.draw(screen)
         self.tutorial_button.draw(screen)
         self.highscore_button.draw(screen)
-        self.start_button.draw(screen) 
+        self.start_button.draw(screen)
 
 class Button:
     def __init__(self, text, x, y, w, h):
@@ -68,7 +70,7 @@ class Button:
 
 class Game:
     def __init__ (self, width, height):
-        self.Background = pygame.image.load("Background.jpg")
+        self.Background = pygame.image.load("BackgroundA.jpg")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
@@ -76,7 +78,7 @@ class Game:
     def update (self):
         pass
     def draw (self, screen):
-        screen.blit(self.Background,(0, 0))
+        screen.blit(self.Background,(0,0))
         title_text = self.font.render("Game start", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
 
@@ -98,7 +100,7 @@ def program():
     pygame.init()
     
     # Set the resolution
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode((size), pygame.FULLSCREEN)
     
     intro = Intro(width, height) 
   
@@ -106,6 +108,31 @@ def program():
         intro.draw(screen)
         # Flip the screen
         pygame.display.flip()
+
+
+"""def toggle_fullscreen():
+    screen = pygame.display.get_surface()
+    tmp = screen.convert()
+    caption = pygame.display.get_caption()
+    cursor = pygame.mouse.get_cursor()  # Duoas 16-04-2007 
+    
+    w,h = screen.get_width(),screen.get_height()
+    flags = screen.get_flags()
+    bits = screen.get_bitsize()
+    
+    pygame.display.quit()
+    pygame.display.init()
+    
+    screen = pygame.display.set_mode((w,h),flags^FULLSCREEN,bits)
+    screen.blit(tmp,(0,0))
+    pygame.display.set_caption(*caption)
+ 
+    pygame.key.set_mods(0) #HACK: work-a-round for a SDL bug??
+ 
+    pygame.mouse.set_cursor( *cursor )  # Duoas 16-04-2007
+    
+    return screen"""
+
 
 # Start the program
 program()
