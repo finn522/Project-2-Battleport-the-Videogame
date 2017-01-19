@@ -128,32 +128,21 @@ class Game:
         self.No  = Button(self.application, 'No', (self.width/50), (self.height/7.300), 55, 55)
 
     def draw (self, screen):
+        screen.blit(self.Background, (0,0))
+        
         keys = pygame.key.get_pressed()
         if keys[pygame.K_BACKSPACE]:
-            self.pause.draw(self.screen)
-            
-        for event in pygame.event.get():
-            if event.type == KEYDOWN:
-                if event.key == K_BACKSPACE:
-                    screen.blit(self.surface,(0,0))
-                    screen.blit(self.surface,(0,0))                    
-                    Pause.draw(self, screen)
+            Pause.draw(self, screen)
         
-
 class Pause:
     def __init__ (self, application, width, height):
         self.application = application
         self.width = width
         self.height = height
-        self.Background = pygame.image.load("Speelbord.png")
-        self.Background = pygame.transform.scale(self.Background, (width, height))
         
-
     def draw(self, screen):
         self.Yes.draw(screen)
-        self.No.draw(screen)
-        screen.blit(self.surface,(self.width, self.height))
-    
+        self.No.draw(screen)  
         
 class Highscore:
     def __init__ (self, application, width, height):
