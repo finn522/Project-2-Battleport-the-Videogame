@@ -13,15 +13,15 @@ blue = (0, 64, 128)
 
 class Application:
     def __init__(self):
-        self.width = 1280
-        self.height = 720
+        self.width = 1920
+        self.height = 1080
         self.size = (self.width, self.height)
     
         # Start PyGame
         pygame.init()
     
         # Set the resolution
-        self.screen = pygame.display.set_mode((self.size)) # pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.size), pygame.FULLSCREEN)
     
         self.phase = "intro"
 
@@ -101,15 +101,13 @@ class Button:
 class Game:
     def __init__ (self, application, width, height):
         self.application = application
-        self.Background = pygame.image.load("BackgroundA.jpg")
+        self.Background = pygame.image.load("Speelbord.png")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
-        title_text = self.font.render("Game start", 1, (255,120,0))
-        screen.blit(title_text,((self.width / 15) , (self.height / 9) ))
 
 class Highscore:
     def __init__ (self, application, width, height):
@@ -143,7 +141,10 @@ def process_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
            sys.exit()
-
+        elif event.type == KEYDOWN:
+               if event.key == K_ESCAPE:
+                   sys.exit()
+                   return
     
 # Main program logic
 def program():
