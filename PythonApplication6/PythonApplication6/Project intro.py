@@ -11,19 +11,44 @@ green = (0, 255, 0)
 red = (255, 0, 0)
 blue = (0, 64, 128)
 
+class Application:
+    def __init__(self):
+        self.width = 1280
+        self.height = 720
+        self.size = (self.width, self.height)
+    
+        # Start PyGame
+        pygame.init()
+    
+        # Set the resolution
+        self.screen = pygame.display.set_mode((self.size)) # pygame.FULLSCREEN)
+    
+        self.phase = "intro"
+
+        self.intro = Intro(self, self.width, self.height)
+        self.game = Game(self, self.width, self.height)
+
+    def application_loop(self):
+        while not process_events():
+            if self.phase == "intro":
+                self.intro.draw(self.screen)
+            elif self.phase == "game":
+                self.game.draw(self.screen)
+            # Flip the screen
+            pygame.display.flip()
+
 class Intro:
-    def __init__ (self, width, height):
+    def __init__ (self, application, width, height):
+        self.application = application
         self.Background = pygame.image.load("BackgroundA.jpg")#easteregg
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
-        self.exit_button = Button('Exit', (width/15), (height/1.25), 170, 50)
-        self.tutorial_button = Button('Tutorial', (width/15), (height/1.4), 170, 50)
-        self.highscore_button = Button('Highscore', (width/15), (height/1.6), 170, 50)
-        self.start_button = Button('Start', (width/15), (height/1.86), 170, 50)
+        self.exit_button = Button(self.application, 'Exit', (width/15), (height/1.25), 170, 50)
+        self.tutorial_button = Button(self.application, 'Tutorial', (width/15), (height/1.4), 170, 50)
+        self.highscore_button = Button(self.application, 'Highscore', (width/15), (height/1.6), 170, 50)
+        self.start_button = Button(self.application, 'Start', (width/15), (height/1.86), 170, 50)
         self.width = width
         self.height = height
-    def update (self):
-        pass
     def draw (self, screen):
         screen.blit(self.Background,(0, 0))
         title_text = self.font.render("BattlePort", 1, (255,120,0))
@@ -34,7 +59,8 @@ class Intro:
         self.start_button.draw(screen)
 
 class Button:
-    def __init__(self, text, x, y, w, h):
+    def __init__(self, application, text, x, y, w, h):
+        self.application = application
         self.text = text
         self.x = x
         self.y = y
@@ -44,19 +70,18 @@ class Button:
         self.font = pygame.font.Font(None, 45)
         self.width = 1280
         self.heigth = 720
-    def update(self):
-        pass      
     def draw (self, screen):
-        mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-        if self.x + 170 > mouse[0] > self.x and self.y + 50 > mouse[1] > self.y:
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_click = pygame.mouse.get_pressed()
+        if self.x + 170 > mouse_pos[0] > self.x and self.y + 50 > mouse_pos[1] > self.y:
             screen.blit(self.surface, (self.x, self.y))
             button_text = self.font.render(self.text, 1, (255,255,255))
             screen.blit(button_text,(( self.x + 5), (self.y + 11) ))
-            if click[0]:
+            if mouse_click[0]:
                 print (self.text)
                 if self.text == 'Start':
-                    start_game = Game(self.width, self.heigth).draw(screen)
+                    # start_game = Game(self.width, self.heigth).draw(screen)
+                    self.application.phase = "game"
                 elif self.text == 'Tutorial':
                     pass
                 elif self.text == 'Highscore':
@@ -69,14 +94,13 @@ class Button:
             screen.blit(button_text,(( self.x + 5), (self.y + 11) ))
 
 class Game:
-    def __init__ (self, width, height):
+    def __init__ (self, application, width, height):
+        self.application = application
         self.Background = pygame.image.load("BackgroundA.jpg")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height
-    def update (self):
-        pass
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Game start", 1, (255,120,0))
@@ -92,22 +116,8 @@ def process_events():
     
 # Main program logic
 def program():
-    width = 1280
-    height = 720
-    size = (width, height)
-    
-    # Start PyGame
-    pygame.init()
-    
-    # Set the resolution
-    screen = pygame.display.set_mode((size), pygame.FULLSCREEN)
-    
-    intro = Intro(width, height) 
-  
-    while not process_events():   
-        intro.draw(screen)
-        # Flip the screen
-        pygame.display.flip()
+    application = Application()
+    application.application_loop()
 
 
 """def toggle_fullscreen():
