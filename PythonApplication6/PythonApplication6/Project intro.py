@@ -18,9 +18,9 @@ class Application:
         self.phase = "intro"
         self.intro = Intro(self, self.width, self.height)
         self.game = Game(self, self.width, self.height)
-        # self.highscore = Highscore(self, self.width, self.height)
-        # self.tutorial = Tutorial(self, self.width, self.height)
-        # self.pause = Pause(self, self.width, self.height)
+        self.highscore = Highscore(self, self.width, self.height)
+        self.tutorial = Tutorial(self, self.width, self.height)
+        self.pause = Pause(self, self.width, self.height)
 
     def back(self):
         for event in pygame.event.get():
@@ -40,13 +40,12 @@ class Application:
                 self.intro.draw(self.screen)
             elif self.phase == "game":
                 self.game.draw(self.screen)
-            """
             elif self.phase == "pause":
                 self.pause.draw(self.screen)
             elif self.phase == 'Highscore':
                 self.highscore.draw(self.screen) 
             elif self.phase == 'Tutorial':
-                self.tutorial.draw(self.screen)"""
+                self.tutorial.draw(self.screen)
             pygame.display.flip()
 
 class Intro:
@@ -123,7 +122,7 @@ class Game:
         
         self.sprites(self.width, self.height)
         self.boats(self.width, self.height)
-    
+        
     def sprites(self, width, height):
         # Sprites Lifepoints
         self.BattleshipHP     = pygame.image.load("BattleshipSprite.png")
@@ -164,10 +163,10 @@ class Game:
 
         # Screen blit Attack & Movepoints
         screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
-        screen.blit(self.MovePoint, (self.width/7, self.height/4.400))
         screen.blit(self.AttPoint, (self.width/12, self.height/1.750))
-        screen.blit(self.MovePoint, (self.width/7, self.height/1.750))
         screen.blit(self.AttPoint, (self.width/12, self.height/1.110))
+        screen.blit(self.MovePoint, (self.width/7, self.height/1.750))
+        screen.blit(self.MovePoint, (self.width/7, self.height/4.400))
         screen.blit(self.MovePoint, (self.width/7, self.height/1.110))
 
         # Screen blit life sprites
@@ -177,35 +176,35 @@ class Game:
         
         # Screen blit topview boats
         screen.blit(self.Battleship, (453.5, 571))
-        screen.blit(self.Destroyer, (560, 571))
-        screen.blit(self.Gunboat, (755, 571))
+        screen.blit(self.Destroyer, (560, 610))
+        screen.blit(self.Gunboat, (755, 645))
         
         if mouse_click[0]:
-            if (self.width/82) + 55 > mouse_pos[0] > (self.width/82) and (self.height/25) + 55 > mouse_pos[1] > (self.height/25):
-                screen.blit(self.ShipMovePushed, (self.width/82, self.height/25))
-            if (self.width/70) + 55 > mouse_pos[0] > (self.width/70) and (self.height/7.300) + 55 > mouse_pos[1] > (self.height/7.300):
-                screen.blit(self.ShipDefPushed, (self.width/70, self.height/7.300))  
-            if (self.width/82) + 55 > mouse_pos[0] > (self.width/82) and (self.height/4.300) + 55 > mouse_pos[1] > (self.height/4.300):
-                screen.blit(self.ShipAttPushed, (self.width/82, self.height/4.300))
+            if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
+                screen.blit(self.ShipMovePushed, (self.width/86.5, self.height/26))
+            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/7.6) + 55 > mouse_pos[1] > (self.height/7.6):
+                screen.blit(self.ShipDefPushed, (self.width/86, self.height/7.6))  
+            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/4.42) + 55 > mouse_pos[1] > (self.height/4.42):
+                screen.blit(self.ShipAttPushed, (self.width/86, self.height/4.42))
 
-            if (self.width/82) + 55 > mouse_pos[0] > (self.width/82) and (self.height/2.580) + 55 > mouse_pos[1] > (self.height/2.580):
-                screen.blit(self.ShipMovePushed, (self.width/82, self.height/2.580))
-            if (self.width/70) + 55 > mouse_pos[0] > (self.width/70) and (self.height/2.075) + 55 > mouse_pos[1] > (self.height/2.075):
-                screen.blit(self.ShipDefPushed, (self.width/70, self.height/2.075))  
-            if (self.width/82) + 55 > mouse_pos[0] > (self.width/82) and (self.height/1.739) + 55 > mouse_pos[1] > (self.height/1.739):
-                screen.blit(self.ShipAttPushed, (self.width/82, self.height/1.739))
+            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.6) + 55 > mouse_pos[1] > (self.height/2.6):
+                screen.blit(self.ShipMovePushed, (self.width/86, self.height/2.6))
+            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.1) + 55 > mouse_pos[1] > (self.height/2.1):
+                screen.blit(self.ShipDefPushed, (self.width/86, self.height/2.1))  
+            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/1.755) + 55 > mouse_pos[1] > (self.height/1.755):
+                screen.blit(self.ShipAttPushed, (self.width/86, self.height/1.755))
 
-            if (self.width/82) + 55 > mouse_pos[0] > (self.width/82) and (self.height/1.395) + 55 > mouse_pos[1] > (self.height/1.395):
-                screen.blit(self.ShipMovePushed, (self.width/82, self.height/1.395))
-            if (self.width/70) + 55 > mouse_pos[0] > (self.width/70) and (self.height/1.233) + 55 > mouse_pos[1] > (self.height/1.233):
-                screen.blit(self.ShipDefPushed, (self.width/70, self.height/1.233))  
-            if (self.width/82) + 55 > mouse_pos[0] > (self.width/82) and (self.height/1.105) + 55 > mouse_pos[1] > (self.height/1.105):
-                screen.blit(self.ShipAttPushed, (self.width/82, self.height/1.105))
+            if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.401) + 55 > mouse_pos[1] > (self.height/1.401):
+                screen.blit(self.ShipMovePushed, (self.width/92, self.height/1.401))
+            if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.242) + 55 > mouse_pos[1] > (self.height/1.242):
+                screen.blit(self.ShipDefPushed, (self.width/92, self.height/1.242))  
+            if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.112) + 55 > mouse_pos[1] > (self.height/1.112):
+                screen.blit(self.ShipAttPushed, (self.width/92, self.height/1.112))
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_BACKSPACE]:
             self.application.phase = "pause"
-        # Application.exit(self)
+        Application.exit(self)
 
 class Turn:
     def __init__ (self, application):
