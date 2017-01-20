@@ -86,7 +86,6 @@ class Button:
         mouse_click = pygame.mouse.get_pressed()
         if self.application.phase != "game":
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
-                screen.blit(self.surface, (self.x, self.y))
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,(( self.x + 5), (self.y + 11)))
                 if mouse_click[0]:
@@ -105,7 +104,15 @@ class Button:
                         sys.exit()
             
             else:
-                screen.blit(self.surface, (self.x, self.y))
+                button_text = self.font.render(self.text, 1, (255,120,0))
+                screen.blit(button_text,((self.x + 5), (self.y + 11)))
+
+        if self.application.phase == "game":
+            self.font = pygame.font.Font(None, 35)
+            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
+                button_text = self.font.render(self.text, 1, (255,255,255))
+                screen.blit(button_text,((self.x + 5), (self.y + 11)))
+            else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
@@ -113,7 +120,7 @@ class Game:
     def __init__ (self, application, width, height):
         self.pause = Pause
         self.turn = Turn
-#        self.modules = Turn.modules 
+#       self.modules = Turn.modules
         self.surface = pygame.Surface((width, height))
         self.application = application
         self.Background = pygame.image.load("Speelbord.png")
@@ -121,7 +128,7 @@ class Game:
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height
-        self.end_turn_button = Button(self.application, 'End Turn', (width/15), (height/1.86), 170, 50)        
+        self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.112), 170, 65)        
 
         self.sprites(self.width, self.height)
         self.boats(self.width, self.height)
@@ -161,9 +168,10 @@ class Game:
     def draw (self, screen):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
-
+        
         screen.blit(self.Background, (0,0))
-
+        self.end_turn_button.mouse_action(screen)
+        
         # Screen blit Attack & Movepoints
         screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
         screen.blit(self.AttPoint, (self.width/12, self.height/1.750))
@@ -184,6 +192,7 @@ class Game:
 #       Turn(self.application)
 #       self.currentplayer_text = self.font.render("Current player: {}".format(Turn.current_turn(self)), 1, (255,255,255))
 #       screen.blit(self.currentplayer_text,((self.width / 15) , (self.height / 9)))
+
         if mouse_click[0]:
             if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
                 screen.blit(self.ShipMovePushed, (self.width/86.5, self.height/26))
