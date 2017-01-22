@@ -83,11 +83,13 @@ class Button:
     def mouse_action (self, screen):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
+
         if self.application.phase != "game":
             self.font = pygame.font.Font(None, 45)
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,(( self.x + 5), (self.y + 11)))
+
                 if mouse_click[0]:
                     print (self.text)
                     if self.text == 'Start':
@@ -112,6 +114,7 @@ class Button:
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
+                
                 if mouse_click[0]:
                     print (self.text)
                     if self.text == 'Pause/Exit':
@@ -120,10 +123,25 @@ class Button:
                 screen.blit(self.surface, (self.x, self.y))
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
+        
+        if self.application.phase == "Highscore":
+            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
+                button_text = self.font.render(self.text, 1, (255,255,255))
+                screen.blit(button_text,((self.x + 5), (self.y + 11)))
+                if mouse_click[0]:
+                    print (self.text)
+                    if self.text == 'Back to menu':
+                        self.application.phase = "intro"
+
+        if self.application.phase == "Tutorial":
+            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
+                button_text = self.font.render(self.text, 1, (255,255,255))
+                screen.blit(button_text,((self.x + 5), (self.y + 11)))
+                if mouse_click[0]:
+                    print (self.text)
+                    if self.text == 'Back to menu':
+                        self.application.phase = "intro"
                 
-
-            
-
 class Game:
     def __init__ (self, application, width, height):
         self.pause = Pause
@@ -136,8 +154,10 @@ class Game:
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height
+
         self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.24), 170, 65)        
         self.pause_button = Button(self.application, ('Pause/Exit'), (width/1.098), (height/1.112), 170, 65)
+        self.current_player_button = Button(self.application, ('Current player:'), (width/1.098), (height/1.955), 170, 75)
 
         self.sprites(self.width, self.height)
         self.boats(self.width, self.height)
@@ -181,7 +201,8 @@ class Game:
         screen.blit(self.Background, (0,0))
         self.end_turn_button.mouse_action(screen)
         self.pause_button.mouse_action(screen)
-        
+        self.current_player_button.mouse_action(screen)
+
         # Screen blit Attack & Movepoints
         screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
         screen.blit(self.AttPoint, (self.width/12, self.height/1.750))
@@ -307,12 +328,15 @@ class Highscore:
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
-        self.height = height 
+        self.height = height
+        
+        self.back_to_menu = Button(self.application, ('Back to menu'), (width/15), (height/1.25), 205, 40)
 
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Highscore", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
+        self.back_to_menu.mouse_action(screen)
         Application.back(self)
     
 class Tutorial:
@@ -322,12 +346,15 @@ class Tutorial:
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
-        self.height = height 
+        self.height = height
+        
+        self.back_to_menu = Button(self.application, ('Back to menu'), (width/15), (height/1.25), 205, 40)
 
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Tutorial", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
+        self.back_to_menu.mouse_action(screen)
         Application.back(self)
           
 def process_events():
