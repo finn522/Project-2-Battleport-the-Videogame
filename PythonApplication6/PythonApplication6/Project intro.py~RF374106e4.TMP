@@ -109,36 +109,33 @@ class Button:
 
         if self.application.phase == "game":
             self.font = pygame.font.Font(None, 35)
-            
-            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
+            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y: 
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
                 for event in pygame.event.get():
                     if event.type == mouse_click:
-                        print(self.text)
+                        print (self.text)
                         if self.text == 'Pause/Exit':
-                            self.application.phase = "pause"                        
+                            self.application.phase = "pause"
+                    
                         if self.text == "End Turn":
                             print(self.turn.turn)
                             self.turn.turn += 1
                             self.turn.current_turn(screen)
 
-
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
-                
         
                 
         if self.application.phase == "pause":
-            self.font = pygame.font.Font(None, 35)
+            self.font = pygame.font.Font(None, 45)
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
                 for event in pygame.event.get():
                     if event.type == mouse_click:
-                        
                         print (self.text)
                         if self.text == '  Yes':
                             self.application.phase = "intro"
@@ -293,6 +290,7 @@ class Turn:
     def current_turn(self, screen):
         self.current_player = self.font2.render(('Current player: {}'.format(self.turn -1)), 1, (255, 120, 0))
         screen.blit(self.current_player, ((self.x / 2), (self.y / 1.997)))
+        
         
 """       if self.turn % 2 == 0:
             self.current_player = self.player1
