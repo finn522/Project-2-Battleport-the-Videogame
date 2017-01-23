@@ -122,6 +122,8 @@ class Button:
                         if self.text == "End Turn":
                             self.turn.turn += 1
                             print(self.turn.turn)
+                            currentplayer_text = self.font.render("Current player: {}".format(self.turn.turn), 1, (255,255,255))
+                            screen.blit(currentplayer_text,((self.x / 15) , (self.y / 9)))
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
@@ -175,11 +177,10 @@ class Button:
                 
 class Game:
     def __init__ (self, application, width, height):
-        self.pause = Pause
-        self.turn = Turn
-#       self.modules = Turn.modules
-        self.surface = pygame.Surface((width, height))
         self.application = application
+        self.pause = Pause
+        self.turn = Turn(self.application)
+        self.surface = pygame.Surface((width, height))
         self.Background = pygame.image.load("Speelbord.png")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
@@ -251,9 +252,6 @@ class Game:
         screen.blit(self.Battleship, (453.5, 571))
         screen.blit(self.Destroyer, (560, 610))
         screen.blit(self.Gunboat, (755, 645))
-#       Turn(self.application)
-#       self.currentplayer_text = self.font.render("Current player: {}".format(Turn.current_turn(self)), 1, (255,255,255))
-#       screen.blit(self.currentplayer_text,((self.width / 15) , (self.height / 9)))
 
         if mouse_click[0]:
             if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
@@ -286,29 +284,22 @@ class Turn:
     def __init__ (self, application):
         self.application = application
         self.turn = 0
-#       self.modules = self.turn % 2
-    def name(self):
-        if turn == 0:
-            self.player1 = Player(self.application, self.turn, "Player1")
-        if turn == 1:
-            self.player2 = Player(self.application, self.turn, "Player2")
-#    def current_turn(self):
-#       if self.modules == 0:
-#            self.current_player = self.player1
-#        else:
-#            self.current_player = self.player2
+        self.player1 = Player(self.application, self.turn, "Player1")
+        self.player2 = Player(self.application, self.turn, "Player2")
+    def current_turn(self):
+       if self.turn % 2 == 0:
+            self.current_player = self.player1
+       else:
+            self.current_player = self.player2
 
 class Player:
     def __init__ (self, application, turn, name):
         self.application = application
         self.turn = turn
         self.player = name
-        self.boat1 = Boats.Gunboat()
-        self.boat2 = Boats.Destroyer()
-        self.boat3 = Boats.Battleship()
-    def Boatlocation (self):
-        if Player1:
-            y < 100 and y > 101
+        self.boat1 = Boats.Gunboat(self.application)
+        self.boat2 = Boats.Destroyer(self.application)
+        self.boat3 = Boats.Battleship(self.application)
 
 class Boats:
     def __init__ (self, application, width, height):
