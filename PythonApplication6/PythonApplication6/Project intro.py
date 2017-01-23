@@ -79,7 +79,7 @@ class Button:
         self.w = w
         self.h = h
         self.surface = pygame.Surface((w, h))
-        self.turn = Turn(application)
+        self.turn = Turn(self.application)
 
     def mouse_action (self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -118,15 +118,11 @@ class Button:
                         print (self.text)
                         if self.text == 'Pause/Exit':
                             self.application.phase = "pause"
-
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
-                        print(self.text)
+                    
                         if self.text == "End Turn":
-                            self.turn.update()
+                            self.turn.turn += 1
                             print(self.turn.turn)
             else:
-                screen.blit(self.surface, (self.x, self.y))
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
@@ -290,13 +286,11 @@ class Turn:
     def __init__ (self, application):
         self.application = application
         self.turn = 0
-        self.game = Game
 #       self.modules = self.turn % 2
-    def update(self): 
-        self.turn = self.turn + 1
     def name(self):
         if turn == 0:
             self.player1 = Player(self.application, self.turn, "Player1")
+        if turn == 1:
             self.player2 = Player(self.application, self.turn, "Player2")
 #    def current_turn(self):
 #       if self.modules == 0:
