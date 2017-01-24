@@ -188,9 +188,20 @@ class Game:
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
 
+        # Set up te player
         self.player1 = Player(self.application, "Player 1")
         self.player2 = Player(self.application, "Player 2")
 
+        # Set up the boats
+        self.player1.boat1 = Boats(self.application, 453.5, 571, 5, 4, 5, 'Battleship')
+        self.player1.boat2 = Boats(self.application, 560, 610, 4, 3, 4, 'Destroyer')
+        self.player1.boat3 = Boats(self.application, 755, 645, 3, 2, 3, 'Gunboat')
+
+        self.player2.boat1 = Boats(self.application, 457.6, 0, 5, 4, 5, 'Battleship')
+        self.player2.boat2 = Boats(self.application, 553, 0, 4, 3, 4, 'Destroyer')
+        self.player2.boat3 = Boats(self.application, 756, 0, 3, 2, 3, 'Gunboat')
+
+        # The buttons in the game
         self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.615), 170, 65)        
         self.pause_button = Button(self.application, ('Pause/Exit'), (width/1.098), (height/1.112), 170, 65)
         self.tutorial_button = Button(self.application, ('Tutorial'), (width/1.098), (height/1.24), 170, 50) 
@@ -446,10 +457,7 @@ class Turn:
 class Player:
     def __init__ (self, application, name):
         self.application = application
-        self.name = name
-        self.boat1 = Boats(self.application, '?', '?', 5, 4, 5, 'Battleship')
-        self.boat2 = Boats(self.application, '?', '?', 4, 3, 4, 'Destroyer')
-        self.boat3 = Boats(self.application, '?', '?', 3, 2, 3, 'Gunboat')        
+        self.name = name      
 
 class Boats:
     def __init__ (self, application, width, height, lifepoints, Attrange, Deffrange, type):
