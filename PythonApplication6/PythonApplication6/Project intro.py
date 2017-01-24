@@ -21,7 +21,7 @@ class Application:
         self.highscore = Highscore(self, self.width, self.height)
         self.tutorial = Tutorial(self, self.width, self.height)
         self.pause = Pause(self, self.width, self.height)
-
+        
     def back(self):
         for event in pygame.event.get():
             if event.type == KEYDOWN:
@@ -79,7 +79,7 @@ class Button:
         self.w = w
         self.h = h
         self.surface = pygame.Surface((w, h))
-        self.turn = Turn(self.application, self.x, self.y)
+        
 
     def mouse_action (self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -109,7 +109,7 @@ class Button:
 
         if self.application.phase == "game":
             self.font = pygame.font.Font(None, 35)
-            
+            self.application.game.turn.current_turn(screen)
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
@@ -119,17 +119,13 @@ class Button:
                         if self.text == 'Pause/Exit':
                             self.application.phase = "pause"                        
                         if self.text == "End Turn":
-                            print(self.turn.turn)
-                            self.turn.turn += 1
-                            self.turn.current_turn(screen)
-
-
+                            print(self.application.game.turn)
+                            self.application.game.turn.turn += 1
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
                 
-        
-                
+                       
         if self.application.phase == "pause":
             self.font = pygame.font.Font(None, 35)
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
@@ -228,6 +224,16 @@ class Game:
         self.Gunboat = pygame.image.load("Gunboat.png")
         self.Gunboat = pygame.transform.scale(self.Gunboat, (int(width / 15.8), int(height / 9.2)))        
 
+        self.Battleship2 = pygame.image.load("BattleshipP2.png")
+        self.Battleship2 = pygame.transform.scale(self.Battleship, (int(width / 31), int(height / 4.7)))
+        self.Battleship2 = pygame.transform.rotate(self.Battleship2, (180))
+        self.Destroyer2 = pygame.image.load("DestroyerP2.png")
+        self.Destroyer2 = pygame.transform.scale(self.Destroyer, (int(width / 24), int(height / 6.2)))
+        self.Destroyer2 = pygame.transform.rotate(self.Destroyer2, (180))
+        self.Gunboat2 = pygame.image.load("GunboatP2.png")
+        self.Gunboat2 = pygame.transform.scale(self.Gunboat, (int(width / 15.8), int(height / 9.2)))  
+        self.Gunboat2 = pygame.transform.rotate(self.Gunboat2, (180))      
+
     def draw (self, screen):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
@@ -248,10 +254,15 @@ class Game:
         screen.blit(self.DestroyerHP, (80,235))
         screen.blit(self.GunboatHP, (80,23))
         
-        # Screen blit topview boats
+        # Screen blit topview boats player 1
         screen.blit(self.Battleship, (453.5, 571))
         screen.blit(self.Destroyer, (560, 610))
         screen.blit(self.Gunboat, (755, 645))
+
+        # Screen blit topview boats player 2
+        screen.blit(self.Battleship2, (453.5, 0))
+        screen.blit(self.Destroyer2, (560, 0))
+        screen.blit(self.Gunboat2, (755, 0))
 
         if mouse_click[0]:
             if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
@@ -286,24 +297,28 @@ class Turn:
         self.turn = 1
         self.x = x
         self.y = y
-        self.player1 = Player(self.application, self.turn, "Player1")
-        self.player2 = Player(self.application, self.turn, "Player2")
-        self.font2 = pygame.font.Font(None, 45)
+        self.player1 = Player(self.application, "Player 1")
+        self.player2 = Player(self.application, "Player 2")
+        self.font2 = pygame.font.Font(None, 25)
 
     def current_turn(self, screen):
-        self.current_player = self.font2.render(('Current player: {}'.format(self.turn -1)), 1, (255, 120, 0))
-        screen.blit(self.current_player, ((self.x / 2), (self.y / 1.997)))
-        
-"""       if self.turn % 2 == 0:
-            self.current_player = self.player1
-       else:
-            self.current_player = self.player2"""
+        self.current_player_text = self.font2.render(('Current:'), 1, (255, 120, 0))
+        screen.blit(self.current_player_text, ((self.x / 1.093), (self.y / 1.388)))
+        self.current_player_name = self.font2.render(('{}'.format(self.currentplayer())), 1, (255, 120, 0))
+        screen.blit(self.current_player_name, ((self.x / 1.093), (self.y / 1.340)))
+        self.currentturn = self.font2.render(('Turn: {}'.format(self.turn)), 1, (255, 120, 0))
+        screen.blit(self.currentturn, ((self.x / 1.093), (self.y / 1.300)))
+      
+    def currentplayer(self):  
+        if self.turn % 2 != 0:
+            return self.player1.name
+        else:
+            return self.player2.name
 
 class Player:
-    def __init__ (self, application, turn, name):
+    def __init__ (self, application, name):
         self.application = application
-        self.turn = turn
-        self.player = name
+        self.name = name
         self.boat1 = Boats.Gunboat(self.application)
         self.boat2 = Boats.Destroyer(self.application)
         self.boat3 = Boats.Battleship(self.application)
