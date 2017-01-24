@@ -80,7 +80,6 @@ class Button:
         self.h = h
         self.surface = pygame.Surface((w, h))
         
-
     def mouse_action (self, screen):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.MOUSEBUTTONDOWN
@@ -126,8 +125,7 @@ class Button:
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
-                
-                       
+                                
         if self.application.phase == "pause":
             self.font = pygame.font.Font(None, 35)
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
@@ -189,6 +187,9 @@ class Game:
         self.Background = pygame.image.load("Speelbord.png")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
+
+        self.player1 = Player(self.application, "Player 1")
+        self.player2 = Player(self.application, "Player 2")
 
         self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.615), 170, 65)        
         self.pause_button = Button(self.application, ('Pause/Exit'), (width/1.098), (height/1.112), 170, 65)
@@ -288,9 +289,7 @@ class Game:
         screen.blit(self.MovePoint, (self.width/7, self.height/1.110))
 
         # Screen blit life sprites
-        screen.blit(self.BattleshipHP, (80,500))
-        screen.blit(self.DestroyerHP, (80,235))
-        screen.blit(self.GunboatHP, (80,23))
+        self.HP(screen)
         
         # Screen blit topview boats player 1
         screen.blit(self.Battleship, (453.5, 571))
@@ -298,9 +297,9 @@ class Game:
         screen.blit(self.Gunboat, (755, 645))
 
         # Screen blit topview boats player 2
-        screen.blit(self.Battleship2, (453.5, 0))
-        screen.blit(self.Destroyer2, (560, 0))
-        screen.blit(self.Gunboat2, (755, 0))
+        screen.blit(self.Battleship2, (457.6, 0))
+        screen.blit(self.Destroyer2, (553, 0))
+        screen.blit(self.Gunboat2, (756, 0))
 
         # Blit cards
         screen.blit(self.Backcard, (1015, 11))
@@ -333,6 +332,42 @@ class Game:
         if keys[pygame.K_BACKSPACE]:
             self.application.phase = "pause"
         Application.exit(self)
+
+    def HP(self, screen):
+        if self.application.game.turn.turn % 2 != 0:
+            self.Cplayer = self.application.game.player1
+        else:
+            self.Cplayer = self.application.game.player2
+        if self.Cplayer.boat1.LifePoints <= 5:
+            screen.blit(self.BattleshipHP, (80,500))
+            if self.Cplayer.boat1.LifePoints <= 4:
+                screen.blit(self.Battleship4HP, (80,500))
+                if self.Cplayer.boat1.LifePoints <= 3:
+                    screen.blit(self.Battleship3HP, (80,500))
+                    if self.Cplayer.boat1.LifePoints <= 2:
+                        screen.blit(self.Battleship2HP, (80,500))
+                        if self.Cplayer.boat1.LifePoints <= 1:
+                            screen.blit(self.Battleship1HP, (80,500))
+                            if self.Cplayer.boat1.LifePoints <= 0:
+                                screen.blit(self.Battleship0HP, (80,500))
+        if self.Cplayer.boat2.LifePoints <= 4:
+            screen.blit(self.DestroyerHP, (80,235))
+            if self.Cplayer.boat2.LifePoints <= 3:
+                screen.blit(self.Destroyer3HP, (80,235))
+                if self.Cplayer.boat2.LifePoints <= 2:
+                    screen.blit(self.Destroyer2HP, (80,235))
+                    if self.Cplayer.boat2.LifePoints <= 1:
+                        screen.blit(self.Destroyer1HP, (80,235))
+                        if self.Cplayer.boat2.LifePoints <= 0:
+                            screen.blit(self.Destroyer0HP, (80,235))
+        if self.Cplayer.boat3.LifePoints <= 3:
+            screen.blit(self.GunboatHP, (80,23))
+            if self.Cplayer.boat3.LifePoints <= 2:
+                screen.blit(self.Gunboat2HP, (80,23))
+                if self.Cplayer.boat3.LifePoints <= 1:
+                    screen.blit(self.Gunboat1HP, (80,23))
+                    if self.Cplayer.boat3.LifePoints <= 0:
+                        screen.blit(self.Gunboat0HP, (80,23))
         
 class cards:
     def __init__(self, application):
@@ -392,8 +427,6 @@ class Turn:
         self.turn = 1
         self.x = x
         self.y = y
-        self.player1 = Player(self.application, "Player 1")
-        self.player2 = Player(self.application, "Player 2")
         self.font2 = pygame.font.Font(None, 25)
 
     def current_turn(self, screen):
@@ -406,39 +439,29 @@ class Turn:
       
     def currentplayer(self):  
         if self.turn % 2 != 0:
-            return self.player1.name
+            return self.application.game.player1.name
         else:
-            return self.player2.name
+            return self.application.game.player2.name
 
 class Player:
     def __init__ (self, application, name):
         self.application = application
         self.name = name
-        self.boat1 = Boats.Gunboat(self.application)
-        self.boat2 = Boats.Destroyer(self.application)
-        self.boat3 = Boats.Battleship(self.application)
+        self.boat1 = Boats(self.application, '?', '?', 5, 4, 5, 'Battleship')
+        self.boat2 = Boats(self.application, '?', '?', 4, 3, 4, 'Destroyer')
+        self.boat3 = Boats(self.application, '?', '?', 3, 2, 3, 'Gunboat')        
 
 class Boats:
-    def __init__ (self, application, width, height):
+    def __init__ (self, application, width, height, lifepoints, Attrange, Deffrange, type):
         self.application = application
         self.width = width
         self.height = height
-    def Battleship(self):
-        self.LifePoints = 5
-        self.Attrange = 4
-        self.Defrange = 5
+        self.LifePoints = lifepoints
+        self.Attrange = Attrange
+        self.Deffrange = Deffrange
+        self.type = type
         self.position = (self.width, self.height)
-    def Destroyer(self):
-        self.LifePoints = 4
-        self.Attrange = 3
-        self.Defrange = 4
-        self.position = (self.width, self.height)
-    def Gunboat(self):
-        self.LifePoints = 3
-        self.Attrange = 2
-        self.Defrange = 3
-        self.position = (self.width, self.height)
-
+  
 class Pause:
     def __init__ (self, application, width, height):
         self.application = application
