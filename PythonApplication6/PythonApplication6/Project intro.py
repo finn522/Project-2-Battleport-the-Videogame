@@ -172,6 +172,8 @@ class Button:
                         print (self.text)
                         if self.text == "Back to menu":
                             self.application.phase = "intro"
+                        if self.text == "Back to game / start game":
+                            self.application.phase = "game"
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
@@ -194,16 +196,42 @@ class Game:
 
         self.sprites(self.width, self.height)
         self.boats(self.width, self.height)
-        self.cards(self.width, self.height)
+        self.card(self.width, self.height)
         
     def sprites(self, width, height):
         # Sprites Lifepoints
         self.BattleshipHP     = pygame.image.load("BattleshipSprite.png")
         self.BattleshipHP     = pygame.transform.scale(self.BattleshipHP, (int(width / 7), int(height / 7)))
+        self.Battleship4HP     = pygame.image.load("Battleship4HP.png")
+        self.Battleship4HP     = pygame.transform.scale(self.Battleship4HP, (int(width / 7), int(height / 7)))
+        self.Battleship3HP     = pygame.image.load("Battleship3HP.png")
+        self.Battleship3HP     = pygame.transform.scale(self.Battleship3HP, (int(width / 7), int(height / 7)))
+        self.Battleship2HP     = pygame.image.load("Battleship2HP.png")
+        self.Battleship2HP     = pygame.transform.scale(self.Battleship2HP, (int(width / 7), int(height / 7)))
+        self.Battleship1HP     = pygame.image.load("Battleship1HP.png")
+        self.Battleship1HP     = pygame.transform.scale(self.Battleship1HP, (int(width / 7), int(height / 7)))
+        self.Battleship0HP     = pygame.image.load("Battleship0HP.png")
+        self.Battleship0HP     = pygame.transform.scale(self.Battleship0HP, (int(width / 7), int(height / 7)))
+
         self.DestroyerHP      = pygame.image.load("DestroyerSprite.png")
         self.DestroyerHP      = pygame.transform.scale(self.DestroyerHP, (int(width / 7), int(height / 7)))
+        self.Destroyer3HP      = pygame.image.load("Destroyer3HP.png")
+        self.Destroyer3HP      = pygame.transform.scale(self.Destroyer3HP, (int(width / 7), int(height / 7)))
+        self.Destroyer2HP      = pygame.image.load("Destroyer2HP.png")
+        self.Destroyer2HP      = pygame.transform.scale(self.Destroyer2HP, (int(width / 7), int(height / 7)))
+        self.Destroyer1HP      = pygame.image.load("Destroyer1HP.png")
+        self.Destroyer1HP      = pygame.transform.scale(self.Destroyer1HP, (int(width / 7), int(height / 7)))
+        self.Destroyer0HP      = pygame.image.load("Destroyer0HP.png")
+        self.Destroyer0HP      = pygame.transform.scale(self.Destroyer0HP, (int(width / 7), int(height / 7)))
+
         self.GunboatHP        = pygame.image.load("GunboatSprite.png")
         self.GunboatHP        = pygame.transform.scale(self.GunboatHP, (int(width / 7), int(height / 7)))
+        self.Gunboat2HP        = pygame.image.load("Gunboat2HP.png")
+        self.Gunboat2HP        = pygame.transform.scale(self.Gunboat2HP, (int(width / 7), int(height / 7)))
+        self.Gunboat1HP        = pygame.image.load("Gunboat1HP.png")
+        self.Gunboat1HP        = pygame.transform.scale(self.Gunboat1HP, (int(width / 7), int(height / 7)))
+        self.Gunboat0HP        = pygame.image.load("Gunboat0HP.png")
+        self.Gunboat0HP        = pygame.transform.scale(self.Gunboat0HP, (int(width / 7), int(height / 7)))
         
         # Sprites Attack & Movepoints
         self.AttPoint      = pygame.image.load("AttackPoint.png")
@@ -238,7 +266,7 @@ class Game:
         self.Gunboat2 = pygame.transform.scale(self.Gunboat, (int(width / 15.8), int(height / 9.2)))  
         self.Gunboat2 = pygame.transform.rotate(self.Gunboat2, (180))     
 
-    def cards(self, width, height):
+    def card(self, width, height):
         self.Backcard = pygame.image.load("Back.png")
         self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
         self.BackcardRotate = pygame.transform.rotate(self.Backcard, (-90))  
@@ -305,6 +333,58 @@ class Game:
         if keys[pygame.K_BACKSPACE]:
             self.application.phase = "pause"
         Application.exit(self)
+        
+class cards:
+    def __init__(self, application):
+        self.application = application
+        # Attack cards
+        self.AttCard1 = pygame.image.load("Adv_Rifling.png")
+        self.AttCard1 = pygame.transform.scale(self.AttCard1, (int(width /10.95), int(height /3.65)))
+        self.AttCard2 = pygame.image.load("EMP_Shot.png")
+        self.AttCard2 = pygame.transform.scale(self.AttCard2, (int(width /10.95), int(height /3.65)))
+        self.AttCard3 = pygame.image.load("FMJ.png")
+        self.AttCard3 = pygame.transform.scale(self.AttCard3, (int(width /10.95), int(height /3.65)))
+        self.AttCard4 = pygame.image.load("Rifling.png")
+        self.AttCard4 = pygame.transform.scale(self.AttCard4, (int(width /10.95), int(height /3.65)))
+        # Deffence cards
+        self.DeffCard1 = pygame.image.load("Sabotage.png")
+        self.DeffCard1 = pygame.transform.scale(self.DeffCard1, (int(width /10.95), int(height /3.65)))
+        self.DeffCard2 = pygame.image.load("Smokescreen.png")
+        self.DeffCard2 = pygame.transform.scale(self.DeffCard2, (int(width /10.95), int(height /3.65)))
+        self.DeffCard3 = pygame.image.load("Repair.png")
+        self.DeffCard3 = pygame.transform.scale(self.DeffCard3, (int(width /10.95), int(height /3.65)))
+        # Utility Cards
+        self.UtiCard1 = pygame.image.load("Adrenaline.png")
+        self.UtiCard1 = pygame.transform.scale(self.UtiCard1, (int(width /10.95), int(height /3.65)))
+        self.UtiCard2 = pygame.image.load("Extra Fuel II.png")
+        self.UtiCard2 = pygame.transform.scale(self.UtiCard2, (int(width /10.95), int(height /3.65)))
+        self.UtiCard3 = pygame.image.load("Extra Fuel I.png")
+        self.UtiCard3 = pygame.transform.scale(self.UtiCard3, (int(width /10.95), int(height /3.65)))
+        self.UtiCard4 = pygame.image.load("Redraw.png")
+        self.UtiCard4 = pygame.transform.scale(self.UtiCard4, (int(width /10.95), int(height /3.65)))
+        self.UtiCard5 = pygame.image.load("Rally.png")
+        self.UtiCard5 = pygame.transform.scale(self.UtiCard5, (int(width /10.95), int(height /3.65)))
+        # Special cards
+        self.SpecCard1 = pygame.image.load("Adrenaline.png")
+        self.SpecCard1 = pygame.transform.scale(self.SpecCard1, (int(width /10.95), int(height /3.65)))
+        self.SpecCard2 = pygame.image.load("Extra Fuel II.png")
+        self.SpecCard2 = pygame.transform.scale(self.SpecCard2, (int(width /10.95), int(height /3.65)))
+        self.SpecCard3 = pygame.image.load("Extra Fuel I.png")
+        self.SpecCard3 = pygame.transform.scale(self.SpecCard3, (int(width /10.95), int(height /3.65)))
+        self.SpecCard4 = pygame.image.load("Redraw.png")
+        self.SpecCard4 = pygame.transform.scale(self.SpecCard4, (int(width /10.95), int(height /3.65)))
+        self.SpecCard5 = pygame.image.load("Rally.png")
+        self.SpecCard5 = pygame.transform.scale(self.SpecCard5, (int(width /10.95), int(height /3.65)))
+
+    def random_normal_cards (self):
+        self.list_of_cards = [self.AttCard1, self.AttCard2, self.AttCard3, self.AttCard4, self.DeffCard1, self.DeffCard2, self.DeffCard3, self.UtiCard1, self.UtiCard2, self.UtiCard3, self.UtiCard4, self.UtiCard5]
+        self.card = random.choice(self.list_of_cards)
+        screen.blit(self.card, (1147, 11)) 
+
+    def random_special_cards (self):
+        self.list_of_specialcards = [self.SpecCard1, self.SpecCard2, self.SpecCard3, self.SpecCard4, self.SpecCard5]
+        self.specialcard = random.choice(self.list_of_specialcards)
+        screen.blit(self.specialcard, (1147, 11)) 
 
 class Turn:
     def __init__ (self, application, x, y):
@@ -406,12 +486,14 @@ class Tutorial:
         self.height = height
 
         self.back_to_menu = Button(self.application, ("Back to menu"), (width/15), (height/1.25), 205, 40)
+        self.back_to_game = Button(self.application, ("Back to game / start game"), (width/15), (height/1.4), 205, 40)
 
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Tutorial", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         self.back_to_menu.mouse_action(screen)
+        self.back_to_game.mouse_action(screen)
         Application.back(self)
           
 def process_events():
