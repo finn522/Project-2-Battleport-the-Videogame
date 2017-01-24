@@ -119,8 +119,10 @@ class Button:
                         if self.text == 'Pause/Exit':
                             self.application.phase = "pause"                        
                         if self.text == "End Turn":
-                            print(self.application.game.turn)
+                            print(self.application.game.turn.turn)
                             self.application.game.turn.turn += 1
+                        if self.text == 'Tutorial':
+                            self.application.phase = "Tutorial"
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
@@ -186,11 +188,13 @@ class Game:
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
 
-        self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.24), 170, 65)        
+        self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.615), 170, 65)        
         self.pause_button = Button(self.application, ('Pause/Exit'), (width/1.098), (height/1.112), 170, 65)
+        self.tutorial_button = Button(self.application, ('Tutorial'), (width/1.098), (height/1.24), 170, 50) 
 
         self.sprites(self.width, self.height)
         self.boats(self.width, self.height)
+        self.cards(self.width, self.height)
         
     def sprites(self, width, height):
         # Sprites Lifepoints
@@ -232,7 +236,12 @@ class Game:
         self.Destroyer2 = pygame.transform.rotate(self.Destroyer2, (180))
         self.Gunboat2 = pygame.image.load("GunboatP2.png")
         self.Gunboat2 = pygame.transform.scale(self.Gunboat, (int(width / 15.8), int(height / 9.2)))  
-        self.Gunboat2 = pygame.transform.rotate(self.Gunboat2, (180))      
+        self.Gunboat2 = pygame.transform.rotate(self.Gunboat2, (180))     
+
+    def cards(self, width, height):
+        self.Backcard = pygame.image.load("Back.png")
+        self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
+        self.BackcardRotate = pygame.transform.rotate(self.Backcard, (-90))  
 
     def draw (self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -240,6 +249,7 @@ class Game:
         screen.blit(self.Background, (0,0))
         self.end_turn_button.mouse_action(screen)
         self.pause_button.mouse_action(screen)
+        self.tutorial_button.mouse_action(screen)
 
         # Screen blit Attack & Movepoints
         screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
@@ -263,6 +273,11 @@ class Game:
         screen.blit(self.Battleship2, (453.5, 0))
         screen.blit(self.Destroyer2, (560, 0))
         screen.blit(self.Gunboat2, (755, 0))
+
+        # Blit cards
+        screen.blit(self.Backcard, (1015, 11))
+        screen.blit(self.Backcard, (1147, 11))  
+        screen.blit(self.BackcardRotate, (1043, 223))          
 
         if mouse_click[0]:
             if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
@@ -303,11 +318,11 @@ class Turn:
 
     def current_turn(self, screen):
         self.current_player_text = self.font2.render(('Current:'), 1, (255, 120, 0))
-        screen.blit(self.current_player_text, ((self.x / 1.093), (self.y / 1.388)))
+        screen.blit(self.current_player_text, ((self.x / 1.093), (self.y / 1.890)))
         self.current_player_name = self.font2.render(('{}'.format(self.currentplayer())), 1, (255, 120, 0))
-        screen.blit(self.current_player_name, ((self.x / 1.093), (self.y / 1.340)))
-        self.currentturn = self.font2.render(('Turn: {}'.format(self.turn)), 1, (255, 120, 0))
-        screen.blit(self.currentturn, ((self.x / 1.093), (self.y / 1.300)))
+        screen.blit(self.current_player_name, ((self.x / 1.093), (self.y / 1.800)))
+        self.currentturn = self.font2.render(('Turn: {}'.format(self.turn - 1)), 1, (255, 120, 0))
+        screen.blit(self.currentturn, ((self.x / 1.093), (self.y / 1.720)))
       
     def currentplayer(self):  
         if self.turn % 2 != 0:
