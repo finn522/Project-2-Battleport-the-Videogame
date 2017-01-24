@@ -183,6 +183,7 @@ class Game:
         self.width = width
         self.height = height
         self.turn = Turn(self.application, self.width, self.height)
+        self.boats = Boats
         self.surface = pygame.Surface((width, height))
         self.Background = pygame.image.load("Speelbord.png")
         self.Background = pygame.transform.scale(self.Background, (width, height))
@@ -207,7 +208,7 @@ class Game:
         self.tutorial_button = Button(self.application, ('Tutorial'), (width/1.098), (height/1.24), 170, 50) 
 
         self.sprites(self.width, self.height)
-        self.boats(self.width, self.height)
+        self.boat(self.width, self.height)
         self.card(self.width, self.height)
         
     def sprites(self, width, height):
@@ -258,7 +259,7 @@ class Game:
         self.ShipAttPushed = pygame.image.load("Att_Button_Pushed.png")
         self.ShipAttPushed = pygame.transform.scale(self.ShipAttPushed, (62, 62))
 
-    def boats(self, width, height):
+    def boat(self, width, height):
         self.width = width
         self.height = height
         self.Battleship = pygame.image.load("Battleship.png")
@@ -303,14 +304,7 @@ class Game:
         self.HP(screen)
         
         # Screen blit topview boats player 1
-        screen.blit(self.Battleship, (453.5, 571))
-        screen.blit(self.Destroyer, (560, 610))
-        screen.blit(self.Gunboat, (755, 645))
-
-        # Screen blit topview boats player 2
-        screen.blit(self.Battleship2, (457.6, 0))
-        screen.blit(self.Destroyer2, (553, 0))
-        screen.blit(self.Gunboat2, (756, 0))
+        self.boats.draw(self,screen)
 
         # Blit cards
         screen.blit(self.Backcard, (1015, 11))
@@ -469,6 +463,16 @@ class Boats:
         self.Deffrange = Deffrange
         self.type = type
         self.position = (self.width, self.height)
+    def draw(self, screen):
+        # Screen blit topview boats player 1
+        screen.blit(self.Battleship, (self.application.game.player1.boat1.width, self.application.game.player1.boat1.height))
+        screen.blit(self.Destroyer, (self.application.game.player1.boat2.width, self.application.game.player1.boat2.height))
+        screen.blit(self.Gunboat, (self.application.game.player1.boat3.width, self.application.game.player1.boat3.height))
+        
+        # Screen blit topview boats player 2
+        screen.blit(self.Battleship2, (self.application.game.player2.boat1.width, self.application.game.player2.boat1.height))
+        screen.blit(self.Destroyer2, (self.application.game.player2.boat2.width, self.application.game.player2.boat2.height))
+        screen.blit(self.Gunboat2, (self.application.game.player2.boat3.width, self.application.game.player2.boat3.height))
   
 class Pause:
     def __init__ (self, application, width, height):
