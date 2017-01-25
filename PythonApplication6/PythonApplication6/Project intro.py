@@ -5,6 +5,7 @@ import pygame
 from pygame.locals import*
 import sys
 import math
+import random
 
 class Application:
     def __init__(self):
@@ -118,6 +119,7 @@ class Button:
                         if self.text == 'Pause/Exit':
                             self.application.phase = "pause"                        
                         if self.text == "End Turn":
+                            #self.save_cards()
                             print(self.application.game.turn.turn)
                             self.application.game.turn.turn += 1
                         if self.text == 'Tutorial':
@@ -175,7 +177,21 @@ class Button:
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
-                
+    
+#    def save_cards (self):
+#        if self.application.game.Cplayer.card1 == None:
+#            self.application.game.Cplayer.card1 = self.application.game.cards.random_normal_cards
+#        elif self.application.game.Cplayer.card2 == None:
+#            self.application.game.Cplayer.card2 = self.application.game.cards.random_normal_cards
+#        elif self.application.game.Cplayer.card3 == None:
+#            self.application.game.Cplayer.card3 = self.application.game.cards.random_normal_cards
+#        elif self.application.game.Cplayer.card4 == None:
+#            self.application.game.Cplayer.card4 = self.application.game.cards.random_normal_cards
+#        elif self.application.game.Cplayer.card5 == None:
+#            self.application.game.Cplayer.card5 = self.application.game.cards.random_normal_cards
+#        else:
+#            pass
+
 class Game:
     def __init__ (self, application, width, height):
         self.application = application
@@ -184,10 +200,12 @@ class Game:
         self.height = height
         self.turn = Turn(self.application, self.width, self.height)
         self.boats = Boats
+        self.cards = cards (self.application, self.width, self.height)
         self.surface = pygame.Surface((width, height))
         self.Background = pygame.image.load("Speelbord.png")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
+        self.font_name_text = pygame.font.SysFont('Arial', 18)
 
         # Set up te player
         self.player1 = Player(self.application, "Player 1")
@@ -210,6 +228,7 @@ class Game:
         self.sprites(self.width, self.height)
         self.boat(self.width, self.height)
         self.card(self.width, self.height)
+        self.ships_count (self.width, self.height)
         
     def sprites(self, width, height):
         # Sprites Lifepoints
@@ -289,6 +308,16 @@ class Game:
         self.Backcard = pygame.image.load("Back.png")
         self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
         self.BackcardRotate = pygame.transform.rotate(self.Backcard, (-90))  
+    
+    def ships_count (self, width, height):
+        self.Ship_lost_p1 = pygame.image.load("Ship_Lost_P1.png")
+        self.Ship_lost_p1 = pygame.transform.scale(self.Ship_lost_p1, (int(width /80), int(height /25)))
+        self.Ship_rem_p1 = pygame.image.load("Ship_Rem_P1.png")
+        self.Ship_rem_p1 = pygame.transform.scale(self.Ship_rem_p1, (int(width /80), int(height /25)))
+        self.Ship_lost_p2 = pygame.image.load("Ship_Lost_P2.png")
+        self.Ship_lost_p2 = pygame.transform.scale(self.Ship_lost_p2, (int(width /80), int(height /25)))
+        self.Ship_rem_p2 = pygame.image.load("Ship_Rem_P2.png")
+        self.Ship_rem_p2 = pygame.transform.scale(self.Ship_rem_p2, (int(width /80), int(height /25)))
 
     def draw (self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -297,7 +326,16 @@ class Game:
         self.end_turn_button.mouse_action(screen)
         self.pause_button.mouse_action(screen)
         self.tutorial_button.mouse_action(screen)
-
+        
+        # check current player
+        if self.application.game.turn.turn % 2 != 0:
+            self.Cplayer = self.application.game.player1
+        else:
+            self.Cplayer = self.application.game.player2
+        
+        # Screen blit diamants
+        self.blit_diamants(screen)
+    
         # Screen blit Attack & Movepoints
         screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
         screen.blit(self.AttPoint, (self.width/12, self.height/1.750))
@@ -312,18 +350,28 @@ class Game:
         # Screen blit topview boats player 1
         self.boats.draw(self,screen)
 
-        # Blit cards
+        # blit card
+#        if self.application.game.Cplayer.card1 != None:
+#            card = self.Cplayer.card1
+#            screen.blit(self.application.game.cards.card)
+#            screen.blit(self.Cplayer.card1, (1000,200))
+#        if self.application.game.Cplayer.card2 != None:
+#            screen.blit(self.Cplayer.card2, (1000,250))
+#        if self.application.game.Cplayer.card3 != None:
+#            screen.blit(self.Cplayer.card3, (1000,300))
+#        if self.application.game.Cplayer.card4 != None:
+#            screen.blit(self.Cplayer.card4, (1000,350))
+#        if self.application.game.Cplayer.card5 != None:
+#            screen.blit(self.Cplayer.card5, (1000,400))
+
+        # Blit back cards
         screen.blit(self.Backcard, (1015, 11))
         screen.blit(self.Backcard, (1147, 11))  
         screen.blit(self.BackcardRotate, (1043, 223))          
 
+        # Left side play buttons
         if self.turn.turn > 2:
             if mouse_click[0]:
-                # check current player
-                if self.application.game.turn.turn % 2 != 0:
-                    self.Cplayer = self.application.game.player1
-                else:
-                    self.Cplayer = self.application.game.player2
                 # check wich button is pushed + actions
                 # Gunboat
                 if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
@@ -456,10 +504,45 @@ class Game:
                     screen.blit(self.Gunboat1HP, (80,23))
                     if self.Cplayer.boat3.LifePoints <= 0:
                         screen.blit(self.Gunboat0HP, (80,23))
+
+    def blit_diamants(self, screen):
+        # names
+        self.name_tekst = self.font_name_text.render(self.player1.name, 1, (255,120,0))
+        screen.blit(self.name_tekst,((1165) , (520)))
+        self.name_tekst2 = self.font_name_text.render(self.player2.name, 1, (255,120,0))
+        screen.blit(self.name_tekst2,((1225) , (520)))
+        # player 1
+        if self.player1.boat1.LifePoints <= 0:
+            screen.blit(self.Ship_lost_p1, (1195, 550))
+        else:
+            screen.blit(self.Ship_rem_p1 ,(1195, 550))
+        if self.player1.boat2.LifePoints <= 0:
+            screen.blit(self.Ship_lost_p1, (1180, 550))
+        else:
+            screen.blit(self.Ship_rem_p1 ,(1180, 550))
+        if self.player1.boat3.LifePoints <= 0:
+            screen.blit(self.Ship_lost_p1, (1165, 550))
+        else:
+            screen.blit(self.Ship_rem_p1 ,(1165, 550))
+        # player 2
+        if self.player2.boat1.LifePoints <= 0:
+            screen.blit(self.Ship_lost_p2, (1225, 550))
+        else:
+            screen.blit(self.Ship_rem_p2 ,(1225, 550))
+        if self.player2.boat2.LifePoints <= 0:
+            screen.blit(self.Ship_lost_p2, (1240, 550))
+        else:
+            screen.blit(self.Ship_rem_p2 ,(1240, 550))
+        if self.player2.boat3.LifePoints <= 0:
+            screen.blit(self.Ship_lost_p2, (1255, 550))
+        else:
+            screen.blit(self.Ship_rem_p2 ,(1255, 550))
  
 class cards:
-    def __init__(self, application):
+    def __init__(self, application, width, height):
         self.application = application
+        self.width = width
+        self.height = height
         # Attack cards
         self.AttCard1 = pygame.image.load("Adv_Rifling.png")
         self.AttCard1 = pygame.transform.scale(self.AttCard1, (int(width /10.95), int(height /3.65)))
@@ -498,16 +581,15 @@ class cards:
         self.SpecCard4 = pygame.transform.scale(self.SpecCard4, (int(width /10.95), int(height /3.65)))
         self.SpecCard5 = pygame.image.load("Rally.png")
         self.SpecCard5 = pygame.transform.scale(self.SpecCard5, (int(width /10.95), int(height /3.65)))
-
-    def random_normal_cards (self):
+       
+    def random_normal_cards (self, screen):
         self.list_of_cards = [self.AttCard1, self.AttCard2, self.AttCard3, self.AttCard4, self.DeffCard1, self.DeffCard2, self.DeffCard3, self.UtiCard1, self.UtiCard2, self.UtiCard3, self.UtiCard4, self.UtiCard5]
-        self.card = random.choice(self.list_of_cards)
-        screen.blit(self.card, (1147, 11)) 
+        self.card = random.choice(self.list_of_cards) 
+        return self.card
 
-    def random_special_cards (self):
+    def random_special_cards (self, screen):
         self.list_of_specialcards = [self.SpecCard1, self.SpecCard2, self.SpecCard3, self.SpecCard4, self.SpecCard5]
         self.specialcard = random.choice(self.list_of_specialcards)
-        screen.blit(self.specialcard, (1147, 11)) 
 
 class Turn:
     def __init__ (self, application, x, y):
@@ -534,8 +616,14 @@ class Turn:
 class Player:
     def __init__ (self, application, name):
         self.application = application
-        self.name = name      
-
+        self.name = name 
+        self.cards = cards
+        self.card1 = None
+        self.card2 = None 
+        self.card3 = None
+        self.card4 = None
+        self.card5 = None
+ 
 class Boats:
     def __init__ (self, application, width, height, lifepoints, Attrange, Deffrange, type, mode):
         self.application = application
