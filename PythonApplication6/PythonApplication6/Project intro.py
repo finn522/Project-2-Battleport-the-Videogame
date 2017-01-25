@@ -119,7 +119,7 @@ class Button:
                         if self.text == 'Pause/Exit':
                             self.application.phase = "pause"                        
                         if self.text == "End Turn":
-                            #self.save_cards()
+                            #self.application.game.Cplayer.card_save()
                             print(self.application.game.turn.turn)
                             self.application.game.turn.turn += 1
                         if self.text == 'Tutorial':
@@ -178,20 +178,6 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
     
-#    def save_cards (self):
-#        if self.application.game.Cplayer.card1 == None:
-#            self.application.game.Cplayer.card1 = self.application.game.cards.random_normal_cards
-#        elif self.application.game.Cplayer.card2 == None:
-#            self.application.game.Cplayer.card2 = self.application.game.cards.random_normal_cards
-#        elif self.application.game.Cplayer.card3 == None:
-#            self.application.game.Cplayer.card3 = self.application.game.cards.random_normal_cards
-#        elif self.application.game.Cplayer.card4 == None:
-#            self.application.game.Cplayer.card4 = self.application.game.cards.random_normal_cards
-#        elif self.application.game.Cplayer.card5 == None:
-#            self.application.game.Cplayer.card5 = self.application.game.cards.random_normal_cards
-#        else:
-#            pass
-
 class Game:
     def __init__ (self, application, width, height):
         self.application = application
@@ -351,18 +337,7 @@ class Game:
         self.boats.draw(self,screen)
 
         # blit card
-#        if self.application.game.Cplayer.card1 != None:
-#            card = self.Cplayer.card1
-#            screen.blit(self.application.game.cards.card)
-#            screen.blit(self.Cplayer.card1, (1000,200))
-#        if self.application.game.Cplayer.card2 != None:
-#            screen.blit(self.Cplayer.card2, (1000,250))
-#        if self.application.game.Cplayer.card3 != None:
-#            screen.blit(self.Cplayer.card3, (1000,300))
-#        if self.application.game.Cplayer.card4 != None:
-#            screen.blit(self.Cplayer.card4, (1000,350))
-#        if self.application.game.Cplayer.card5 != None:
-#            screen.blit(self.Cplayer.card5, (1000,400))
+        #self.application.game.Cplayer.blit_card(screen)
 
         # Blit back cards
         screen.blit(self.Backcard, (1015, 11))
@@ -581,8 +556,11 @@ class cards:
         self.SpecCard4 = pygame.transform.scale(self.SpecCard4, (int(width /10.95), int(height /3.65)))
         self.SpecCard5 = pygame.image.load("Rally.png")
         self.SpecCard5 = pygame.transform.scale(self.SpecCard5, (int(width /10.95), int(height /3.65)))
+        # Back card
+        self.Backcard = pygame.image.load("Back.png")
+        self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
        
-    def random_normal_cards (self, screen):
+    def random_normal_cards (self):
         self.list_of_cards = [self.AttCard1, self.AttCard2, self.AttCard3, self.AttCard4, self.DeffCard1, self.DeffCard2, self.DeffCard3, self.UtiCard1, self.UtiCard2, self.UtiCard3, self.UtiCard4, self.UtiCard5]
         self.card = random.choice(self.list_of_cards) 
         return self.card
@@ -618,11 +596,32 @@ class Player:
         self.application = application
         self.name = name 
         self.cards = cards
-        self.card1 = None
-        self.card2 = None 
-        self.card3 = None
-        self.card4 = None
-        self.card5 = None
+    def player_cards(self):
+        self.card1 = self.application.game.cards.Backcard
+        self.card2 = self.application.game.cards.Backcard
+        self.card3 = self.application.game.cards.Backcard
+        self.card4 = self.application.game.cards.Backcard
+        self.card5 = self.application.game.cards.Backcard
+    def card_save (self):
+        if self.card1 == None:
+            self.card1 = self.application.game.cards.random_normal_cards()
+        elif self.card2 == None:
+            self.card2 = self.application.game.cards.random_normal_cards()
+        elif self.card3 == None:
+            self.card3 = self.application.game.cards.random_normal_cards()
+        elif self.card4 == None:
+            self.card4 = self.application.game.cards.random_normal_cards()
+        elif self.card5 == None:
+            self.card5 = self.application.game.cards.random_normal_cards()
+        else:
+            pass
+        return
+    def blit_card(self, screen):
+        screen.blit(self.card1, (1000, 200))
+        screen.blit(self.card2, (1000, 220))
+        screen.blit(self.card3, (1000, 240))
+        screen.blit(self.card4, (1000, 260))
+        screen.blit(self.card5, (1000, 280))
  
 class Boats:
     def __init__ (self, application, width, height, lifepoints, Attrange, Deffrange, type, mode):
