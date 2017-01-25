@@ -194,13 +194,13 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453.5, 571, 5, 4, 5, 'Battleship')
-        self.player1.boat2 = Boats(self.application, 560, 610, 4, 3, 4, 'Destroyer')
-        self.player1.boat3 = Boats(self.application, 755, 645, 3, 2, 3, 'Gunboat')
+        self.player1.boat1 = Boats(self.application, 458, 571, 5, 4, 5, 'Battleship')
+        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 4, 'Destroyer')
+        self.player1.boat3 = Boats(self.application, 258, 645, 3, 2, 3, 'Gunboat')
 
-        self.player2.boat1 = Boats(self.application, 457.6, 0, 5, 4, 5, 'Battleship')
-        self.player2.boat2 = Boats(self.application, 553, 0, 4, 3, 4, 'Destroyer')
-        self.player2.boat3 = Boats(self.application, 756, 0, 3, 2, 3, 'Gunboat')
+        self.player2.boat1 = Boats(self.application, 459, 0, 5, 4, 5, 'Battleship')
+        self.player2.boat2 = Boats(self.application, 490, 0, 4, 3, 4, 'Destroyer')
+        self.player2.boat3 = Boats(self.application, 258, 0, 3, 2, 3, 'Gunboat')
 
         # The buttons in the game
         self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.615), 170, 65)        
@@ -311,35 +311,89 @@ class Game:
         screen.blit(self.Backcard, (1147, 11))  
         screen.blit(self.BackcardRotate, (1043, 223))          
 
-        if mouse_click[0]:
-            # check current player
-            if self.application.game.turn.turn % 2 != 0:
-                self.Cplayer = self.application.game.player1
-            else:
-                self.Cplayer = self.application.game.player2
-            # check wich button is pushed + actions
-            # Battleship
-            if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
-                screen.blit(self.ShipMovePushed, (self.width/86.5, self.height/26))
-            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/7.6) + 55 > mouse_pos[1] > (self.height/7.6):
-                screen.blit(self.ShipDefPushed, (self.width/86, self.height/7.6))  
-            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/4.42) + 55 > mouse_pos[1] > (self.height/4.42):
-                screen.blit(self.ShipAttPushed, (self.width/86, self.height/4.42))
-            # Destroyer
-            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.6) + 55 > mouse_pos[1] > (self.height/2.6):
-                screen.blit(self.ShipMovePushed, (self.width/86, self.height/2.6))
-            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.1) + 55 > mouse_pos[1] > (self.height/2.1):
-                screen.blit(self.ShipDefPushed, (self.width/86, self.height/2.1))  
-            if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/1.755) + 55 > mouse_pos[1] > (self.height/1.755):
-                screen.blit(self.ShipAttPushed, (self.width/86, self.height/1.755))
-            # Gunboat
-            if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.401) + 55 > mouse_pos[1] > (self.height/1.401):
-                screen.blit(self.ShipMovePushed, (self.width/92, self.height/1.401))
-            if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.242) + 55 > mouse_pos[1] > (self.height/1.242):
-                screen.blit(self.ShipDefPushed, (self.width/92, self.height/1.242))  
-            if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.112) + 55 > mouse_pos[1] > (self.height/1.112):
-                screen.blit(self.ShipAttPushed, (self.width/92, self.height/1.112))
+        if self.turn.turn > 2:
+            if mouse_click[0]:
+                # check current player
+                if self.application.game.turn.turn % 2 != 0:
+                    self.Cplayer = self.application.game.player1
+                else:
+                    self.Cplayer = self.application.game.player2
+                # check wich button is pushed + actions
+                # Battleship
+                if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
+                    screen.blit(self.ShipMovePushed, (self.width/86.5, self.height/26))
+                if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/7.6) + 55 > mouse_pos[1] > (self.height/7.6):
+                    screen.blit(self.ShipDefPushed, (self.width/86, self.height/7.6))  
+                if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/4.42) + 55 > mouse_pos[1] > (self.height/4.42):
+                    screen.blit(self.ShipAttPushed, (self.width/86, self.height/4.42))
+                # Destroyer
+                if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.6) + 55 > mouse_pos[1] > (self.height/2.6):
+                    screen.blit(self.ShipMovePushed, (self.width/86, self.height/2.6))
+                if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.1) + 55 > mouse_pos[1] > (self.height/2.1):
+                    screen.blit(self.ShipDefPushed, (self.width/86, self.height/2.1))  
+                if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/1.755) + 55 > mouse_pos[1] > (self.height/1.755):
+                    screen.blit(self.ShipAttPushed, (self.width/86, self.height/1.755))
+                # Gunboat
+                if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.401) + 55 > mouse_pos[1] > (self.height/1.401):
+                    screen.blit(self.ShipMovePushed, (self.width/92, self.height/1.401))
+                if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.242) + 55 > mouse_pos[1] > (self.height/1.242):
+                    screen.blit(self.ShipDefPushed, (self.width/92, self.height/1.242))  
+                if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.112) + 55 > mouse_pos[1] > (self.height/1.112):
+                    screen.blit(self.ShipAttPushed, (self.width/92, self.height/1.112))
         
+        if self.turn.turn == 1:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_q]:
+                self.player1.boat1.width -= 35.7
+                if self.player1.boat1.width < 275:
+                    self.player1.boat1.width = 275
+            if keys[pygame.K_e]:
+                self.player1.boat1.width += 35.7
+                if self.player1.boat1.width > 953.3:
+                    self.player1.boat1.width = 953.3
+            if keys[pygame.K_a]:
+                self.player1.boat2.width -= 35.7
+                if self.player1.boat2.width < 275:
+                    self.player1.boat2.width = 275
+            if keys[pygame.K_d]:
+                self.player1.boat2.width += 35.7
+                if self.player1.boat2.width > 953.3:
+                    self.player1.boat2.width = 953.3
+            if keys[pygame.K_z]:
+                 self.player1.boat3.width -= 35.7
+                 if self.player1.boat3.width < 258:
+                     self.player1.boat3.width = 258
+            if keys[pygame.K_c]:
+                self.player1.boat3.width += 35.7
+                if self.player1.boat3.width > 935:
+                    self.player1.boat3.width = 935
+        if self.turn.turn == 2:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_q]:
+                self.player2.boat1.width -= 35.7
+                if self.player2.boat1.width < 275:
+                    self.player2.boat1.width = 275
+            if keys[pygame.K_e]:
+                self.player2.boat1.width += 35.7
+                if self.player2.boat1.width > 953.3:
+                    self.player2.boat1.width = 953.3
+            if keys[pygame.K_a]:
+                self.player2.boat2.width -= 35.7
+                if self.player2.boat2.width < 275:
+                    self.player2.boat2.width = 275
+            if keys[pygame.K_d]:
+                self.player2.boat2.width += 35.7
+                if self.player2.boat2.width > 953.3:
+                    self.player2.boat2.width = 953.3
+            if keys[pygame.K_z]:
+               self.player2.boat3.width -= 35.7
+               if self.player2.boat3.width < 258:
+                  self.player2.boat3.width = 258
+            if keys[pygame.K_c]:
+                self.player2.boat3.width += 35.7
+                if self.player2.boat3.width > 935:
+                    self.player2.boat3.width = 935
+
         # press backspace to go to the pause menu
         keys = pygame.key.get_pressed()
         if keys[pygame.K_BACKSPACE]:
@@ -383,7 +437,8 @@ class Game:
                     screen.blit(self.Gunboat1HP, (80,23))
                     if self.Cplayer.boat3.LifePoints <= 0:
                         screen.blit(self.Gunboat0HP, (80,23))
-        
+ 
+
 class cards:
     def __init__(self, application):
         self.application = application
