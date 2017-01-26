@@ -329,8 +329,10 @@ class Game:
         # check current player
         if self.application.game.turn.turn % 2 != 0:
             self.Cplayer = self.application.game.player1
+            self.Eplayer = self.application.game.player2
         else:
             self.Cplayer = self.application.game.player2
+            self.Eplayer = self.application.game.player1
         
         # Screen blit diamants
         self.blit_diamants(screen)
@@ -365,7 +367,6 @@ class Game:
                 if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
                     screen.blit(self.ShipMovePushed, (self.width/86.5, self.height/26))
                     self.GunboatMovement = True
-        
                 if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/7.6) + 55 > mouse_pos[1] > (self.height/7.6):
                     screen.blit(self.ShipDefPushed, (self.width/86, self.height/7.6))  
                     if self.Cplayer.boat3.Mode == 'Att':
@@ -595,7 +596,7 @@ class Game:
              if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/1.350) + 20 > mouse_pos[1] > (self.height/1.350):
                 self.Cplayer.boat1.width += 35.7
                 if self.Cplayer.boat1.width > 955:
-                    self.Cplayer.boat1.width = 955       
+                    self.Cplayer.boat1.width = 955         
 
 class cards:
     def __init__(self, application, width, height):
