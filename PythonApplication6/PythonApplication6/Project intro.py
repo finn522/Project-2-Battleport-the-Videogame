@@ -218,6 +218,8 @@ class Game:
         self.player2.boat2 = Boats(self.application, 490, 0, 4, 3, 3, 4, 'Destroyer', 'Att')
         self.player2.boat3 = Boats(self.application, 258, 0, 3, 5, 2, 3, 'Gunboat', 'Att')
 
+        self.boatlist = [ self.player1.boat1, self.player1.boat2, self.player1.boat3, self.player2.boat1, self.player2.boat2, self.player2.boat3 ]
+
         # The buttons in the game
         self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.615), 170, 65)        
         self.pause_button = Button(self.application, ('Pause/Exit'), (width/1.098), (height/1.112), 170, 65)
@@ -330,6 +332,7 @@ class Game:
         self.end_turn_button.mouse_action(screen)
         self.pause_button.mouse_action(screen)
         self.tutorial_button.mouse_action(screen)
+
         
         # check current player
         if self.application.game.turn.turn % 2 != 0:
@@ -548,20 +551,21 @@ class Game:
         else:
             screen.blit(self.Ship_rem_p2 ,(1255, 550))
 
-    def collision(self, Cplayer, Eplayer):
-        return self.rectB.colliderect(self.rectB)   
+    def collision_player1(self, Cplayer, Eplayer):
+        if self.player1.boat1.height - (self.height/5.6) < self.player2.boat1.height and self.player1.boat1.width - (self.width/31) < self.player2.boat1.width and self.player1.boat1.width > self.player2.boat1.width:
+            if self.player1.boat1.height - (self.height/5.6) < self.player2.boat1.height:
+                self.player1.boat1.height += 35.7
 
     def movement(self, screen, Cplayer):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
+        self.collision_player1(self.Cplayer, self.Eplayer)
         for event in pygame.event.get():
             if event.type == MOUSEBUTTONDOWN:
              # Movement gunboat
              if self.Cplayer.boat3.Fuel > 0:
                  if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/24) + 20 > mouse_pos[1] > (self.height/24):
                     self.Cplayer.boat3.height -= 35.7
-                    if Cplayer.boat3.is_collided_with(self.rectB):
-                        self.collision(screen, self.Cplayer, self.Eplayer)
                     if self.Cplayer.boat3.height < 0:
                         self.Cplayer.boat3.height = 0
                     else: 
@@ -767,8 +771,11 @@ class Tutorial:
         self.P1 = pygame.image.load("tekstveld1.png")
         self.P1 = pygame.transform.scale(self.P1, (int(width/2), int(height/2)))
 
-        self.P2 = pygame.image.load("tekstveld2.png")
+        self.P2 = pygame.image.load("test1.png")
         self.P2 = pygame.transform.scale(self.P2, (int(width/2), int(height/2)))
+
+        self.P3 = pygame.image.load("test2.png")
+        self.P3 = pygame.transform.scale(self.P3, (int(width/2), int(height/2)))
 
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
@@ -777,9 +784,10 @@ class Tutorial:
         self.back_to_menu.mouse_action(screen)
         self.back_to_game.mouse_action(screen)
         Application.back(self)
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
-            if self.page != 2:
+            if self.page != 3:
                 self.page += 1
             else:
                 pass
@@ -788,10 +796,13 @@ class Tutorial:
                 self.page -= 1
             else:
                 pass
+
         if self.page == 1:
             screen.blit(self.P1, (self.width/5, self.height/5))
         elif self.page == 2:
             screen.blit(self.P2, (self.width/5, self.height/5))
+        elif self.page == 3:
+            screen.blit(self.P3, (self.width/5, self.height/5))
           
 def process_events():
     for event in pygame.event.get():
