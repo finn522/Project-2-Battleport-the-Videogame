@@ -741,7 +741,6 @@ class Highscore:
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height
-        
         self.back_to_menu = Button(self.application, ('Back to menu'), (width/15), (height/1.25), 205, 40)
 
     def draw (self, screen):
@@ -749,8 +748,8 @@ class Highscore:
         title_text = self.font.render("Highscore", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         self.back_to_menu.mouse_action(screen)
-        Application.back(self)
-    
+        Application.back(self)  
+
 class Tutorial:
     def __init__ (self, application, width, height):
         self.application = application
@@ -763,6 +762,14 @@ class Tutorial:
         self.back_to_menu = Button(self.application, ("Back to menu"), (width/15), (height/1.25), 205, 40)
         self.back_to_game = Button(self.application, ("Back to game / start game"), (width/15), (height/1.4), 205, 40)
 
+        self.page = 1
+    
+        self.P1 = pygame.image.load("tekstveld1.png")
+        self.P1 = pygame.transform.scale(self.P1, (int(width/2), int(height/2)))
+
+        self.P2 = pygame.image.load("tekstveld2.png")
+        self.P2 = pygame.transform.scale(self.P2, (int(width/2), int(height/2)))
+
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Tutorial", 1, (255,120,0))
@@ -770,6 +777,21 @@ class Tutorial:
         self.back_to_menu.mouse_action(screen)
         self.back_to_game.mouse_action(screen)
         Application.back(self)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT]:
+            if self.page != 2:
+                self.page += 1
+            else:
+                pass
+        if keys[pygame.K_LEFT]:
+            if self.page != 1:
+                self.page -= 1
+            else:
+                pass
+        if self.page == 1:
+            screen.blit(self.P1, (self.width/5, self.height/5))
+        elif self.page == 2:
+            screen.blit(self.P2, (self.width/5, self.height/5))
           
 def process_events():
     for event in pygame.event.get():
