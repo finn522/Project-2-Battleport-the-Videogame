@@ -126,7 +126,6 @@ class Button:
                             self.application.game.GunboatMovement = False
                             self.application.game.DestroyerMovement = False
                             self.application.game.BattleshipMovement = False
-                            #self.application.game.Cplayer.card_save()
                             print(self.application.game.turn.turn)
                             self.application.game.turn.turn += 1
                         if self.text == 'Tutorial':
@@ -306,11 +305,6 @@ class Game:
 
         self.d_pad = pygame.image.load("d_pad grey.png")
         self.d_pad = pygame.transform.scale(self.d_pad, (int(width / 21), int(height / 12)))
-
-    def card(self, width, height):
-        self.Backcard = pygame.image.load("Back.png")
-        self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
-        self.BackcardRotate = pygame.transform.rotate(self.Backcard, (-90))  
     
     def ships_count (self, width, height):
         self.Ship_lost_p1 = pygame.image.load("Ship_Lost_P1.png")
@@ -356,15 +350,7 @@ class Game:
         self.HP(screen)
         
         # Screen blit topview boats player 1
-        self.boats.draw(self,screen)
-
-        # blit card
-        #self.application.game.Cplayer.blit_card(screen)
-
-        # Blit back cards
-        screen.blit(self.Backcard, (1015, 11))
-        screen.blit(self.Backcard, (1147, 11))  
-        screen.blit(self.BackcardRotate, (1043, 223))          
+        self.boats.draw(self,screen)        
 
         # Left side play buttons / information
         if self.turn.turn > 2:
@@ -630,62 +616,6 @@ class Game:
         self.Fuel_boat3 = self.font_FUEL.render(("Fuel: " + str(self.Cplayer.boat3.Fuel)), 1, (255,120,0))
         screen.blit(self.Fuel_boat3,((195) , (130)))           
 
-class cards:
-    def __init__(self, application, width, height):
-        self.application = application
-        self.width = width
-        self.height = height
-        # Attack cards
-        self.AttCard1 = pygame.image.load("Adv_Rifling.png")
-        self.AttCard1 = pygame.transform.scale(self.AttCard1, (int(width /10.95), int(height /3.65)))
-        self.AttCard2 = pygame.image.load("EMP_Shot.png")
-        self.AttCard2 = pygame.transform.scale(self.AttCard2, (int(width /10.95), int(height /3.65)))
-        self.AttCard3 = pygame.image.load("FMJ.png")
-        self.AttCard3 = pygame.transform.scale(self.AttCard3, (int(width /10.95), int(height /3.65)))
-        self.AttCard4 = pygame.image.load("Rifling.png")
-        self.AttCard4 = pygame.transform.scale(self.AttCard4, (int(width /10.95), int(height /3.65)))
-        # Deffence cards
-        self.DeffCard1 = pygame.image.load("Sabotage.png")
-        self.DeffCard1 = pygame.transform.scale(self.DeffCard1, (int(width /10.95), int(height /3.65)))
-        self.DeffCard2 = pygame.image.load("Smokescreen.png")
-        self.DeffCard2 = pygame.transform.scale(self.DeffCard2, (int(width /10.95), int(height /3.65)))
-        self.DeffCard3 = pygame.image.load("Repair.png")
-        self.DeffCard3 = pygame.transform.scale(self.DeffCard3, (int(width /10.95), int(height /3.65)))
-        # Utility Cards
-        self.UtiCard1 = pygame.image.load("Adrenaline.png")
-        self.UtiCard1 = pygame.transform.scale(self.UtiCard1, (int(width /10.95), int(height /3.65)))
-        self.UtiCard2 = pygame.image.load("Extra Fuel II.png")
-        self.UtiCard2 = pygame.transform.scale(self.UtiCard2, (int(width /10.95), int(height /3.65)))
-        self.UtiCard3 = pygame.image.load("Extra Fuel I.png")
-        self.UtiCard3 = pygame.transform.scale(self.UtiCard3, (int(width /10.95), int(height /3.65)))
-        self.UtiCard4 = pygame.image.load("Redraw.png")
-        self.UtiCard4 = pygame.transform.scale(self.UtiCard4, (int(width /10.95), int(height /3.65)))
-        self.UtiCard5 = pygame.image.load("Rally.png")
-        self.UtiCard5 = pygame.transform.scale(self.UtiCard5, (int(width /10.95), int(height /3.65)))
-        # Special cards
-        self.SpecCard1 = pygame.image.load("Al_Hull.png")
-        self.SpecCard1 = pygame.transform.scale(self.SpecCard1, (int(width /10.95), int(height /3.65)))
-        self.SpecCard2 = pygame.image.load("Farsight.png")
-        self.SpecCard2 = pygame.transform.scale(self.SpecCard2, (int(width /10.95), int(height /3.65)))
-        self.SpecCard3 = pygame.image.load("Intel Hack.png")
-        self.SpecCard3 = pygame.transform.scale(self.SpecCard3, (int(width /10.95), int(height /3.65)))
-        self.SpecCard4 = pygame.image.load("Jack_Sparrow.png")
-        self.SpecCard4 = pygame.transform.scale(self.SpecCard4, (int(width /10.95), int(height /3.65)))
-        self.SpecCard5 = pygame.image.load("Reinforced.png")
-        self.SpecCard5 = pygame.transform.scale(self.SpecCard5, (int(width /10.95), int(height /3.65)))
-        # Back card
-        self.Backcard = pygame.image.load("Back.png")
-        self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
-       
-    def random_normal_cards (self):
-        self.list_of_cards = [self.AttCard1, self.AttCard2, self.AttCard3, self.AttCard4, self.DeffCard1, self.DeffCard2, self.DeffCard3, self.UtiCard1, self.UtiCard2, self.UtiCard3, self.UtiCard4, self.UtiCard5]
-        self.card = random.choice(self.list_of_cards) 
-        return self.card
-
-    def random_special_cards (self, screen):
-        self.list_of_specialcards = [self.SpecCard1, self.SpecCard2, self.SpecCard3, self.SpecCard4, self.SpecCard5]
-        self.specialcard = random.choice(self.list_of_specialcards)
-
 class Turn:
     def __init__ (self, application, x, y):
         self.application = application
@@ -712,33 +642,7 @@ class Player:
     def __init__ (self, application, name):
         self.application = application
         self.name = name 
-        self.cards = cards
-    def player_cards(self):
-        self.card1 = self.application.game.cards.Backcard
-        self.card2 = self.application.game.cards.Backcard
-        self.card3 = self.application.game.cards.Backcard
-        self.card4 = self.application.game.cards.Backcard
-        self.card5 = self.application.game.cards.Backcard
-    def card_save (self):
-        if self.card1 == None:
-            self.card1 = self.application.game.cards.random_normal_cards()
-        elif self.card2 == None:
-            self.card2 = self.application.game.cards.random_normal_cards()
-        elif self.card3 == None:
-            self.card3 = self.application.game.cards.random_normal_cards()
-        elif self.card4 == None:
-            self.card4 = self.application.game.cards.random_normal_cards()
-        elif self.card5 == None:
-            self.card5 = self.application.game.cards.random_normal_cards()
-        else:
-            pass
-        return
-    def blit_card(self, screen):
-        screen.blit(self.card1, (1000, 200))
-        screen.blit(self.card2, (1000, 220))
-        screen.blit(self.card3, (1000, 240))
-        screen.blit(self.card4, (1000, 260))
-        screen.blit(self.card5, (1000, 280))
+        self.game = Game      
  
 class Boats:
     def __init__ (self, application, width, height, lifepoints, Fuel, Attrange, Deffrange, type, mode):
