@@ -377,7 +377,8 @@ class Game:
                 # Gunboat
                 if (self.width/86.5) + 55 > mouse_pos[0] > (self.width/86.5) and (self.height/26) + 55 > mouse_pos[1] > (self.height/26):
                     screen.blit(self.ShipMovePushed, (self.width/86.5, self.height/26))
-                    self.GunboatMovement = True
+                    if self.Cplayer.boat3.Mode == 'Att':
+                        self.GunboatMovement = True
                 if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/7.6) + 55 > mouse_pos[1] > (self.height/7.6):
                     screen.blit(self.ShipDefPushed, (self.width/86, self.height/7.6))  
                     if self.Cplayer.boat3.Mode == 'Att':
@@ -389,7 +390,8 @@ class Game:
                 # Destroyer
                 if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.6) + 55 > mouse_pos[1] > (self.height/2.6):
                     screen.blit(self.ShipMovePushed, (self.width/86, self.height/2.6))
-                    self.DestroyerMovement = True
+                    if self.Cplayer.boat2.Mode == 'Att':
+                        self.DestroyerMovement = True
                 if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.1) + 55 > mouse_pos[1] > (self.height/2.1):
                     screen.blit(self.ShipDefPushed, (self.width/86, self.height/2.1))
                     if self.Cplayer.boat2.Mode == 'Att':
@@ -401,7 +403,8 @@ class Game:
                 # Battleship
                 if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.401) + 55 > mouse_pos[1] > (self.height/1.401):
                     screen.blit(self.ShipMovePushed, (self.width/92, self.height/1.401))
-                    self.BattleshipMovement = True
+                    if self.Cplayer.boat1.Mode == 'Att':
+                        self.BattleshipMovement = True
                 if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.242) + 55 > mouse_pos[1] > (self.height/1.242):
                     screen.blit(self.ShipDefPushed, (self.width/92, self.height/1.242))  
                     if self.Cplayer.boat1.Mode == 'Att':
@@ -563,84 +566,84 @@ class Game:
         self.collision_player1(self.Cplayer, self.Eplayer)
         for event in pygame.event.get():
             if event.type == MOUSEBUTTONDOWN:
-             # Movement gunboat
-             if self.Cplayer.boat3.Fuel > 0:
-                 if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/24) + 20 > mouse_pos[1] > (self.height/24):
-                    self.Cplayer.boat3.height -= 35.7
-                    if self.Cplayer.boat3.height < 0:
-                        self.Cplayer.boat3.height = 0
-                    else: 
-                        self.Cplayer.boat3.Fuel -= 1
-                 if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/10.5) + 20 > mouse_pos[1] > (self.height/10.5):
-                    self.Cplayer.boat3.height += 35.7
-                    if self.Cplayer.boat3.height > 642:
-                        self.Cplayer.boat3.height = 642
-                    else:
-                        self.Cplayer.boat3.Fuel -= 1
-                 if (self.width/75) + 20 > mouse_pos[0] > (self.width/75) and (self.height/15) + 20 > mouse_pos[1] > (self.height/15):
-                    self.Cplayer.boat3.width -= 35.7
-                    if self.Cplayer.boat3.width < 257:
-                        self.Cplayer.boat3.width = 257
-                    else:
-                        self.Cplayer.boat3.Fuel -= 1
-                 if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/15) + 20 > mouse_pos[1] > (self.height/15):
-                    self.Cplayer.boat3.width += 35.7
-                    if self.Cplayer.boat3.width > 935:
-                        self.Cplayer.boat3.width = 935
-                    else:
-                        self.Cplayer.boat3.Fuel -= 1
+                # Movement gunboat
+                if self.Cplayer.boat3.Fuel > 0:
+                    if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/24) + 20 > mouse_pos[1] > (self.height/24):
+                        self.Cplayer.boat3.height -= 35.7
+                        if self.Cplayer.boat3.height < 0:
+                            self.Cplayer.boat3.height = 0
+                        else: 
+                            self.Cplayer.boat3.Fuel -= 1
+                    if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/10.5) + 20 > mouse_pos[1] > (self.height/10.5):
+                        self.Cplayer.boat3.height += 35.7
+                        if self.Cplayer.boat3.height > 642:
+                            self.Cplayer.boat3.height = 642
+                        else:
+                            self.Cplayer.boat3.Fuel -= 1
+                    if (self.width/75) + 20 > mouse_pos[0] > (self.width/75) and (self.height/15) + 20 > mouse_pos[1] > (self.height/15):
+                        self.Cplayer.boat3.width -= 35.7
+                        if self.Cplayer.boat3.width < 257:
+                            self.Cplayer.boat3.width = 257
+                        else:
+                            self.Cplayer.boat3.Fuel -= 1
+                    if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/15) + 20 > mouse_pos[1] > (self.height/15):
+                        self.Cplayer.boat3.width += 35.7
+                        if self.Cplayer.boat3.width > 935:
+                            self.Cplayer.boat3.width = 935
+                        else:
+                            self.Cplayer.boat3.Fuel -= 1
              # Movement destroyer
-             if self.Cplayer.boat2.Fuel > 0:
-                 if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/2.59) + 20 > mouse_pos[1] > (self.height/2.59):
-                    self.Cplayer.boat2.height -= 35.7
-                    if self.Cplayer.boat2.height < 0:
-                        self.Cplayer.boat2.height = 0
-                    else:
-                        self.Cplayer.boat2.Fuel -= 1
-                 if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/2.27) + 20 > mouse_pos[1] > (self.height/2.27):
-                    self.Cplayer.boat2.height += 35.7
-                    if self.Cplayer.boat2.height > 610:
-                        self.Cplayer.boat2.height = 610
-                    else:
-                        self.Cplayer.boat2.Fuel -= 1
-                 if (self.width/75) + 20 > mouse_pos[0] > (self.width/75) and (self.height/2.41) + 20 > mouse_pos[1] > (self.height/2.41):
-                    self.Cplayer.boat2.width -= 35.7
-                    if self.Cplayer.boat2.width < 275:
-                        self.Cplayer.boat2.width = 275
-                    else:
-                        self.Cplayer.boat2.Fuel -= 1
-                 if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/2.41) + 20 > mouse_pos[1] > (self.height/2.41):
-                    self.Cplayer.boat2.width += 35.7
-                    if self.Cplayer.boat2.width > 955:
-                        self.Cplayer.boat2.width = 955
-                    else:
-                        self.Cplayer.boat2.Fuel -= 1
-                 # Movement Battleship
-             if self.Cplayer.boat1.Fuel > 0:
-                 if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/1.400) + 20 > mouse_pos[1] > (self.height/1.400):
-                    self.Cplayer.boat1.height -= 35.7
-                    if self.Cplayer.boat1.height < 0:
-                        self.Cplayer.boat1.height = 0
-                    else:
-                        self.Cplayer.boat1.Fuel -= 1
-                 if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/1.300) + 20 > mouse_pos[1] > (self.height/1.300):
-                    self.Cplayer.boat1.height += 35.7
-                    if self.Cplayer.boat1.height > 570:
-                        self.Cplayer.boat1.height = 570
-                    else:
-                        self.Cplayer.boat1.Fuel -= 1
-                 if (self.width/75) + 20 > mouse_pos[0] > (self.width/75) and (self.height/1.350) + 20 > mouse_pos[1] > (self.height/1.350):
-                    self.Cplayer.boat1.width -= 35.7
-                    if self.Cplayer.boat1.width < 275:
-                        self.Cplayer.boat1.width = 275
-                    else:
-                        self.Cplayer.boat1.Fuel -= 1
-                 if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/1.350) + 20 > mouse_pos[1] > (self.height/1.350):
-                    self.Cplayer.boat1.width += 35.7
-                    if self.Cplayer.boat1.width > 955:
-                        self.Cplayer.boat1.width = 955
-                    else:
-                        self.Cplayer.boat1.Fuel -= 1
+                if self.Cplayer.boat2.Fuel > 0:
+                    if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/2.59) + 20 > mouse_pos[1] > (self.height/2.59):
+                        self.Cplayer.boat2.height -= 35.7
+                        if self.Cplayer.boat2.height < 0:
+                            self.Cplayer.boat2.height = 0
+                        else:
+                            self.Cplayer.boat2.Fuel -= 1
+                    if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/2.27) + 20 > mouse_pos[1] > (self.height/2.27):
+                        self.Cplayer.boat2.height += 35.7
+                        if self.Cplayer.boat2.height > 610:
+                            self.Cplayer.boat2.height = 610
+                        else:
+                            self.Cplayer.boat2.Fuel -= 1
+                    if (self.width/75) + 20 > mouse_pos[0] > (self.width/75) and (self.height/2.41) + 20 > mouse_pos[1] > (self.height/2.41):
+                        self.Cplayer.boat2.width -= 35.7
+                        if self.Cplayer.boat2.width < 275:
+                            self.Cplayer.boat2.width = 275
+                        else:
+                            self.Cplayer.boat2.Fuel -= 1
+                    if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/2.41) + 20 > mouse_pos[1] > (self.height/2.41):
+                        self.Cplayer.boat2.width += 35.7
+                        if self.Cplayer.boat2.width > 955:
+                            self.Cplayer.boat2.width = 955
+                        else:
+                            self.Cplayer.boat2.Fuel -= 1
+                    # Movement Battleship
+                if self.Cplayer.boat1.Fuel > 0:
+                    if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/1.400) + 20 > mouse_pos[1] > (self.height/1.400):
+                        self.Cplayer.boat1.height -= 35.7
+                        if self.Cplayer.boat1.height < 0:
+                            self.Cplayer.boat1.height = 0
+                        else:
+                            self.Cplayer.boat1.Fuel -= 1
+                    if (self.width/37) + 20 > mouse_pos[0] > (self.width/37) and (self.height/1.300) + 20 > mouse_pos[1] > (self.height/1.300):
+                        self.Cplayer.boat1.height += 35.7
+                        if self.Cplayer.boat1.height > 570:
+                            self.Cplayer.boat1.height = 570
+                        else:
+                            self.Cplayer.boat1.Fuel -= 1
+                    if (self.width/75) + 20 > mouse_pos[0] > (self.width/75) and (self.height/1.350) + 20 > mouse_pos[1] > (self.height/1.350):
+                        self.Cplayer.boat1.width -= 35.7
+                        if self.Cplayer.boat1.width < 275:
+                            self.Cplayer.boat1.width = 275
+                        else:
+                            self.Cplayer.boat1.Fuel -= 1
+                    if (self.width/23) + 20 > mouse_pos[0] > (self.width/23) and (self.height/1.350) + 20 > mouse_pos[1] > (self.height/1.350):
+                        self.Cplayer.boat1.width += 35.7
+                        if self.Cplayer.boat1.width > 955:
+                            self.Cplayer.boat1.width = 955
+                        else:
+                            self.Cplayer.boat1.Fuel -= 1
 
     def blit_fuel (self, screen, Cplayer):
         self.Fuel_boat1 = self.font_FUEL.render(("Fuel: " + str(self.Cplayer.boat1.Fuel)), 1, (255,120,0))
