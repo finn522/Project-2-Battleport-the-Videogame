@@ -6,6 +6,7 @@ from pygame.locals import*
 import sys
 import math
 import random
+from Database import *
 
 class Application:
     def __init__(self):
@@ -752,6 +753,7 @@ class Highscore:
         title_text = self.font.render("Highscore", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         self.back_to_menu.mouse_action(screen)
+        self.highscore = get_highscore()
         Application.back(self)  
 
 class Tutorial:
