@@ -15,6 +15,9 @@ class Application:
         self.size = (self.width, self.height)
      
         pygame.init()
+        pygame.display.set_caption('BattlePort')
+        self.VicSound = pygame.mixer.Sound('C:\School\Git2\Project-2\Sounds\BurkeBlack.wav')
+        pygame.mixer.music.load('C:\School\Git2\Project-2\Sounds\BGM.wav')
     
         self.screen = pygame.display.set_mode((self.size))#, pygame.FULLSCREEN)
         self.phase = "intro"
@@ -23,6 +26,8 @@ class Application:
         self.highscore = Highscore(self, self.width, self.height)
         self.tutorial = Tutorial(self, self.width, self.height)
         self.pause = Pause(self, self.width, self.height)
+        self.victoryp1 = VictoryP1(self, self.width, self.height)
+        self.victoryp2 = VictoryP2(self, self.width, self.height)
         
     def back(self):
         for event in pygame.event.get():
@@ -37,10 +42,14 @@ class Application:
                     self.application.phase = "pause"
 
     def application_loop(self):
+        pygame.mixer.music.play(-1)
         while not process_events():
             self.event = pygame.event.get()
             if self.phase == "intro":
                 self.intro.draw(self.screen)
+                self.VicSound.stop()
+                pygame.mixer.music.rewind()
+                pygame.mixer.music.unpause()
             elif self.phase == "game":
                 self.game.draw(self.screen)
             elif self.phase == "pause":
@@ -49,6 +58,14 @@ class Application:
                 self.highscore.draw(self.screen) 
             elif self.phase == 'Tutorial':
                 self.tutorial.draw(self.screen)
+            elif self.phase == 'VictoryP1':
+                self.victoryp1.draw(self.screen)
+                pygame.mixer.music.pause()
+                self.VicSound.play()
+            elif self.phase == 'VictoryP2':
+                self.victoryp2.draw(self.screen)
+                pygame.mixer.music.pause()
+                self.VicSound.play()
             pygame.display.flip()
 
 class Intro:
@@ -187,6 +204,42 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
+        if self.application.phase == "VictoryP1":
+            self.font = pygame.font.Font(None, 45)
+            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
+                button_text = self.font.render(self.text, 1, (255,255,255))
+                screen.blit(button_text,(( self.x + 5), (self.y + 11)))
+
+                for event in pygame.event.get():
+                    if event.type == mouse_click:
+                        print (self.text)
+                        if self.text == 'Start':
+                            self.application.phase = "game"
+                        elif self.text == "Back to menu":
+                            self.application.phase = "intro"
+            
+            else:
+                button_text = self.font.render(self.text, 1, (255,120,0))
+                screen.blit(button_text,((self.x + 5), (self.y + 11)))
+
+        if self.application.phase == "VictoryP2":
+            self.font = pygame.font.Font(None, 45)
+            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
+                button_text = self.font.render(self.text, 1, (255,255,255))
+                screen.blit(button_text,(( self.x + 5), (self.y + 11)))
+
+                for event in pygame.event.get():
+                    if event.type == mouse_click:
+                        print (self.text)
+                        if self.text == 'Start':
+                            self.application.phase = "game"
+                        elif self.text == "Back to menu":
+                            self.application.phase = "intro"
+            
+            else:
+                button_text = self.font.render(self.text, 1, (255,120,0))
+                screen.blit(button_text,((self.x + 5), (self.y + 11)))
+
 class Game:
     def __init__(self, application, width, height):
         self.application = application
@@ -211,9 +264,9 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453, 571, 5, 80, 4, 5, 'Battleship', 'Att')
-        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att')
-        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att')
+        self.player1.boat1 = Boats(self.application, 453, 571, 0, 80, 4, 5, 'Battleship', 'Att')
+        self.player1.boat2 = Boats(self.application, 490, 610, 0, 3, 3, 4, 'Destroyer', 'Att')
+        self.player1.boat3 = Boats(self.application, 258, 645, 0, 5, 2, 3, 'Gunboat', 'Att')
 
         self.player2.boat1 = Boats(self.application, 458, 0, 5, 80, 4, 5, 'Battleship', 'Att')
         self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att')
@@ -329,6 +382,11 @@ class Game:
         self.pause_button.mouse_action(screen)
         self.tutorial_button.mouse_action(screen)
         
+        if self.player1.boat1.LifePoints <= 0 and self.player1.boat2.LifePoints <= 0 and self.player1.boat3.LifePoints <= 0:
+            self.application.phase = 'VictoryP2'
+        elif self.player2.boat1.LifePoints <= 0 and self.player2.boat2.LifePoints <= 0 and self.player2.boat3.LifePoints <= 0:
+            self.application.phase = 'VictoryP1'
+
         # check current player
         if self.application.game.turn.turn % 2 != 0:
             self.Cplayer = self.application.game.player1
@@ -863,6 +921,50 @@ class Tutorial:
         elif self.page == 3:
             screen.blit(self.P3, (self.width/5, self.height/5))
 
+class VictoryP1:
+    def __init__ (self, application, width, height):
+        self.application = application
+        self.Background = pygame.image.load("VictoryBG.jpg")
+        self.Background = pygame.transform.scale(self.Background, (width, height))
+        self.font = pygame.font.SysFont('Arial', 150)
+        self.font2 = pygame.font.SysFont('Arial',50)
+        self.back_to_menu_button = Button(self.application, 'Back to menu', (width/15), (height/1.25), 170, 50)
+        self.replay_button = Button(self.application, 'Replay', (width/15), (height/1.37), 170, 50)
+        self.width = width
+        self.height = height
+
+
+    def draw (self, screen):
+        screen.blit(self.Background,(0, 0))
+        title_text = self.font.render("Victory", 1, (255,120,0))
+        victory_text = self.font2.render("Congratulations Player 1. You have decimated the enemy.", 1, (255,120,0))
+        screen.blit(title_text,((self.width / 15) , (self.height / 9)))
+        screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
+        self.back_to_menu_button.mouse_action(screen)
+        self.replay_button.mouse_action(screen)
+        
+
+class VictoryP2:
+    def __init__ (self, application, width, height):
+        self.application = application
+        self.Background = pygame.image.load("VictoryBG.jpg")
+        self.Background = pygame.transform.scale(self.Background, (width, height))
+        self.font = pygame.font.SysFont('Arial', 150)
+        self.font2 = pygame.font.SysFont('Arial',50)
+        self.back_to_menu_button = Button(self.application, 'Back to menu', (width/15), (height/1.25), 170, 50)
+        self.replay_button = Button(self.application, 'Replay', (width/15), (height/1.37), 170, 50)
+        self.width = width
+        self.height = height
+
+
+    def draw (self, screen):
+        screen.blit(self.Background,(0, 0))
+        title_text = self.font.render("Victory", 1, (255,120,0))
+        victory_text = self.font2.render("Congratulations Player 2. You have decimated the enemy.", 1, (255,120,0))
+        screen.blit(title_text,((self.width / 15) , (self.height / 9)))
+        screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
+        self.back_to_menu_button.mouse_action(screen)
+        self.replay_button.mouse_action(screen)
 def process_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
