@@ -27,7 +27,7 @@ class Application:
         self.highscore = Highscore(self, self.width, self.height)
         self.tutorial = Tutorial(self, self.width, self.height)
         self.pause = Pause(self, self.width, self.height)
-        self.victoryp1 = VictoryP1(self, self.width, self.height)
+        self.victory = Victory(self, self.width, self.height)
         
     def back(self):
         for event in pygame.event.get():
@@ -58,12 +58,8 @@ class Application:
                 self.highscore.draw(self.screen) 
             elif self.phase == 'Tutorial':
                 self.tutorial.draw(self.screen)
-            elif self.phase == 'VictoryP1':
-                self.victoryp1.draw(self.screen)
-                pygame.mixer.music.pause()
-                self.VicSound.play()
-            elif self.phase == 'VictoryP2':
-                self.victoryp2.draw(self.screen)
+            elif self.phase == 'Victory':
+                self.victory.draw(self.screen)
                 pygame.mixer.music.pause()
                 self.VicSound.play()
             pygame.display.flip()
@@ -393,9 +389,9 @@ class Game:
 
         # Go to winning screen
         if self.player1.boat1.LifePoints <= 0 and self.player1.boat2.LifePoints <= 0 and self.player1.boat3.LifePoints <= 0:
-            self.application.phase = 'VictoryP1'
+            self.application.phase = 'Victory'
         elif self.player2.boat1.LifePoints <= 0 and self.player2.boat2.LifePoints <= 0 and self.player2.boat3.LifePoints <= 0:
-            self.application.phase = 'VictoryP1'
+            self.application.phase = 'Victory'
         
         # Screen blit diamants
         self.blit_diamants(screen)
@@ -924,7 +920,7 @@ class Tutorial:
         elif self.page == 3:
             screen.blit(self.P3, (self.width/5, self.height/5))
 
-class VictoryP1:
+class Victory:
     def __init__ (self, application, width, height):
         self.application = application
         self.Background = pygame.image.load("VictoryBG.jpg")
