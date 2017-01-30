@@ -137,6 +137,9 @@ class Button:
                             self.application.game.Cplayer.boat1.Fuel = 80
                             self.application.game.Cplayer.boat2.Fuel = 80
                             self.application.game.Cplayer.boat3.Fuel = 80
+                            self.application.game.Cplayer.boat1.AttPoints = 1
+                            self.application.game.Cplayer.boat2.AttPoints = 1
+                            self.application.game.Cplayer.boat3.AttPoints = 1
                             self.application.game.GunboatMovement = False
                             self.application.game.DestroyerMovement = False
                             self.application.game.BattleshipMovement = False
@@ -237,7 +240,6 @@ class Button:
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
 class Game:
-
     def __init__(self, application, width, height):
         self.application = application
         self.pause = Pause
@@ -261,13 +263,13 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453, 571, 5, 80, 4, 5, 'Battleship', 'Att')
-        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att')
-        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att')
+        self.player1.boat1 = Boats(self.application, 453, 571, 5, 80, 4, 5, 'Battleship', 'Att', 1)
+        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
+        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att', 1)
 
-        self.player2.boat1 = Boats(self.application, 458, 0, 5, 80, 4, 5, 'Battleship', 'Att')
-        self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att')
-        self.player2.boat3 = Boats(self.application, 258, 0, 3, 5, 2, 3, 'Gunboat', 'Att')
+        self.player2.boat1 = Boats(self.application, 458, 0, 5, 80, 4, 5, 'Battleship', 'Att', 1)
+        self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
+        self.player2.boat3 = Boats(self.application, 258, 0, 3, 5, 2, 3, 'Gunboat', 'Att', 1)
 
         # The buttons in the game
         self.end_turn_button = Button(self.application, ('End Turn'), (width/1.098), (height/1.615), 170, 65)        
@@ -397,9 +399,13 @@ class Game:
         self.blit_diamants(screen)
     
         # Screen blit Attack & Movepoints
-        screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
-        screen.blit(self.AttPoint, (self.width/12, self.height/1.750))
-        screen.blit(self.AttPoint, (self.width/12, self.height/1.110))
+        if self.application.game.Cplayer.boat3.AttPoints > 0:
+            screen.blit(self.AttPoint, (self.width/12, self.height/4.400))
+        if self.application.game.Cplayer.boat2.AttPoints > 0:
+            screen.blit(self.AttPoint, (self.width/12, self.height/1.750))
+        if self.application.game.Cplayer.boat1.AttPoints > 0:
+            screen.blit(self.AttPoint, (self.width/12, self.height/1.110))
+
         if self.Cplayer.boat2.Fuel > 0:
             screen.blit(self.MovePoint, (self.width/7, self.height/1.750))
         if self.Cplayer.boat3.Fuel > 0:
@@ -438,10 +444,12 @@ class Game:
                             self.Cplayer.boat3.Mode = 'Att'
                     if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/4.42) + 55 > mouse_pos[1] > (self.height/4.42):
                         screen.blit(self.ShipAttPushed, (self.width/86, self.height/4.42))
-                        if self.Cplayer == self.application.game.player1:
-                            self.attackP1B3()
-                        elif self.Cplayer == self.application.game.player2:
-                            self.attackP2B3()
+                        if self.application.game.Cplayer.boat3.AttPoints > 0:
+                            if self.Cplayer == self.application.game.player1:
+                                self.attackP1B3()
+                            elif self.Cplayer == self.application.game.player2:
+                                self.attackP2B3()
+                            self.application.game.Cplayer.boat3.AttPoints -= 1
 
                     # Destroyer
                     if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.6) + 55 > mouse_pos[1] > (self.height/2.6):
@@ -456,10 +464,12 @@ class Game:
                             self.Cplayer.boat2.Mode = 'Att'  
                     if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/1.755) + 55 > mouse_pos[1] > (self.height/1.755):
                         screen.blit(self.ShipAttPushed, (self.width/86, self.height/1.755))
-                        if self.Cplayer == self.application.game.player1:
-                            self.attackP1B2()
-                        elif self.Cplayer == self.application.game.player2:
-                            self.attackP2B2()
+                        if self.application.game.Cplayer.boat2.AttPoints > 0:
+                            if self.Cplayer == self.application.game.player1:
+                                self.attackP1B2()
+                            elif self.Cplayer == self.application.game.player2:
+                                self.attackP2B2()
+                            self.application.game.Cplayer.boat2.AttPoints -= 1
 
                     # Battleship
                     if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.401) + 55 > mouse_pos[1] > (self.height/1.401):
@@ -474,10 +484,12 @@ class Game:
                             self.Cplayer.boat1.Mode = 'Att' 
                     if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.112) + 55 > mouse_pos[1] > (self.height/1.112):
                         screen.blit(self.ShipAttPushed, (self.width/92, self.height/1.112))
-                        if self.Cplayer == self.application.game.player1:
-                            self.attackP1B1()
-                        elif self.Cplayer == self.application.game.player2:
-                            self.attackP2B1()
+                        if self.application.game.Cplayer.boat1.AttPoints > 0:
+                            if self.Cplayer == self.application.game.player1:
+                                self.attackP1B1()
+                            elif self.Cplayer == self.application.game.player2:
+                                self.attackP2B1()
+                            self.application.game.Cplayer.boat1.AttPoints -= 1
 
         if self.GunboatMovement == True:
             screen.blit(self.d_pad, (self.width / 82, self.height / 25))
@@ -792,7 +804,7 @@ class Player:
         self.game = Game
 
 class Boats:
-    def __init__ (self, application, width, height, lifepoints, Fuel, Attrange, Deffrange, type, mode):
+    def __init__ (self, application, width, height, lifepoints, Fuel, Attrange, Deffrange, type, mode, AttPoints):
         self.application = application
         self.width = width
         self.height = height
@@ -802,6 +814,7 @@ class Boats:
         self.Deffrange = Deffrange
         self.type = type
         self.Mode = mode
+        self.AttPoints = AttPoints
         self.position = (self.width, self.height)
 
     def draw(self, screen):
