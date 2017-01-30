@@ -210,9 +210,11 @@ class Button:
                 for event in pygame.event.get():
                     if event.type == mouse_click:
                         print (self.text)
-                        if self.text == 'Start':
+                        if self.text == 'Replay':
+########################### PLACE CODE HERE TO RESET GAME VALUES ###########################
                             self.application.phase = "game"
                         elif self.text == "Back to menu":
+########################### PLACE CODE HERE TO RESET GAME VALUES ###########################
                             self.application.phase = "intro"
             
             else:
@@ -243,11 +245,11 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453, 571, 5, 80, 4, 5, 'Battleship', 'Att', 1)
-        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
-        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att', 1)
+        self.player1.boat1 = Boats(self.application, 453, 571, 1, 2, 4, 5, 'Battleship', 'Att', 1)
+        self.player1.boat2 = Boats(self.application, 490, 610, 1, 3, 3, 4, 'Destroyer', 'Att', 1)
+        self.player1.boat3 = Boats(self.application, 258, 645, 1, 5, 2, 3, 'Gunboat', 'Att', 1)
 
-        self.player2.boat1 = Boats(self.application, 458, 0, 5, 80, 4, 5, 'Battleship', 'Att', 1)
+        self.player2.boat1 = Boats(self.application, 458, 0, 5, 2, 4, 5, 'Battleship', 'Att', 1)
         self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
         self.player2.boat3 = Boats(self.application, 258, 0, 3, 5, 2, 3, 'Gunboat', 'Att', 1)
 
