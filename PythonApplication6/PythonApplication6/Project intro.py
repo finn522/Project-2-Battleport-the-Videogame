@@ -62,6 +62,7 @@ class Application:
                 self.victory.draw(self.screen)
                 pygame.mixer.music.pause()
                 self.VicSound.play()
+                self.VicSound.set_volume(0.2)
             pygame.display.flip()
 
 class Intro:
@@ -203,7 +204,7 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
-        if self.application.phase == "VictoryP1":
+        if self.application.phase == "Victory":
             self.font = pygame.font.Font(None, 45)
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
@@ -221,23 +222,6 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
-        if self.application.phase == "VictoryP2":
-            self.font = pygame.font.Font(None, 45)
-            if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
-                button_text = self.font.render(self.text, 1, (255,255,255))
-                screen.blit(button_text,(( self.x + 5), (self.y + 11)))
-
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
-                        print (self.text)
-                        if self.text == 'Start':
-                            self.application.phase = "game"
-                        elif self.text == "Back to menu":
-                            self.application.phase = "intro"
-            
-            else:
-                button_text = self.font.render(self.text, 1, (255,120,0))
-                screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
 class Game:
     def __init__(self, application, width, height):
