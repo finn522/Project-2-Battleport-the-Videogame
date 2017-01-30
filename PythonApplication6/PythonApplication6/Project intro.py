@@ -28,7 +28,6 @@ class Application:
         self.tutorial = Tutorial(self, self.width, self.height)
         self.pause = Pause(self, self.width, self.height)
         self.victoryp1 = VictoryP1(self, self.width, self.height)
-        self.victoryp2 = VictoryP2(self, self.width, self.height)
         
     def back(self):
         for event in pygame.event.get():
@@ -266,9 +265,9 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453, 571, 0, 80, 4, 5, 'Battleship', 'Att')
-        self.player1.boat2 = Boats(self.application, 490, 610, 0, 3, 3, 4, 'Destroyer', 'Att')
-        self.player1.boat3 = Boats(self.application, 258, 645, 0, 5, 2, 3, 'Gunboat', 'Att')
+        self.player1.boat1 = Boats(self.application, 453, 571, 5, 80, 4, 5, 'Battleship', 'Att')
+        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att')
+        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att')
 
         self.player2.boat1 = Boats(self.application, 458, 0, 5, 80, 4, 5, 'Battleship', 'Att')
         self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att')
@@ -383,11 +382,6 @@ class Game:
         self.end_turn_button.mouse_action(screen)
         self.pause_button.mouse_action(screen)
         self.tutorial_button.mouse_action(screen)
-        
-        if self.player1.boat1.LifePoints <= 0 and self.player1.boat2.LifePoints <= 0 and self.player1.boat3.LifePoints <= 0:
-            self.application.phase = 'VictoryP2'
-        elif self.player2.boat1.LifePoints <= 0 and self.player2.boat2.LifePoints <= 0 and self.player2.boat3.LifePoints <= 0:
-            self.application.phase = 'VictoryP1'
 
         # check current player
         if self.application.game.turn.turn % 2 != 0:
@@ -396,6 +390,12 @@ class Game:
         else:
             self.Cplayer = self.application.game.player2
             self.Eplayer = self.application.game.player1
+
+        # Go to winning screen
+        if self.player1.boat1.LifePoints <= 0 and self.player1.boat2.LifePoints <= 0 and self.player1.boat3.LifePoints <= 0:
+            self.application.phase = 'VictoryP1'
+        elif self.player2.boat1.LifePoints <= 0 and self.player2.boat2.LifePoints <= 0 and self.player2.boat3.LifePoints <= 0:
+            self.application.phase = 'VictoryP1'
         
         # Screen blit diamants
         self.blit_diamants(screen)
@@ -939,28 +939,7 @@ class VictoryP1:
     def draw (self, screen):
         screen.blit(self.Background,(0, 0))
         title_text = self.font.render("Victory", 1, (255,120,0))
-        victory_text = self.font2.render("Congratulations Player 1. You have decimated the enemy.", 1, (255,120,0))
-        screen.blit(title_text,((self.width / 15) , (self.height / 9)))
-        screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
-        self.back_to_menu_button.mouse_action(screen)
-        self.replay_button.mouse_action(screen)
-        
-class VictoryP2:
-    def __init__ (self, application, width, height):
-        self.application = application
-        self.Background = pygame.image.load("VictoryBG.jpg")
-        self.Background = pygame.transform.scale(self.Background, (width, height))
-        self.font = pygame.font.SysFont('Arial', 150)
-        self.font2 = pygame.font.SysFont('Arial',50)
-        self.back_to_menu_button = Button(self.application, 'Back to menu', (width/15), (height/1.25), 170, 50)
-        self.replay_button = Button(self.application, 'Replay', (width/15), (height/1.37), 170, 50)
-        self.width = width
-        self.height = height
-
-    def draw (self, screen):
-        screen.blit(self.Background,(0, 0))
-        title_text = self.font.render("Victory", 1, (255,120,0))
-        victory_text = self.font2.render("Congratulations Player 2. You have decimated the enemy.", 1, (255,120,0))
+        victory_text = self.font2.render("Congratulations {}. You have decimated the enemy.".format(str(self.application.game.Cplayer.name)), 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
         self.back_to_menu_button.mouse_action(screen)
