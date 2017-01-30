@@ -880,44 +880,23 @@ class Tutorial:
 
         self.back_to_menu = Button(self.application, ("Back to menu"), (width/15), (height/1.25), 205, 40)
         self.back_to_game = Button(self.application, ("Back to game / start game"), (width/15), (height/1.4), 205, 40)
-
-        self.page = 1
     
         self.P1 = pygame.image.load("tekstveld1.png")
-        self.P1 = pygame.transform.scale(self.P1, (int(width/2), int(height/2)))
-
-        self.P2 = pygame.image.load("test1.png")
-        self.P2 = pygame.transform.scale(self.P2, (int(width/2), int(height/2)))
-
-        self.P3 = pygame.image.load("test2.png")
-        self.P3 = pygame.transform.scale(self.P3, (int(width/2), int(height/2)))
+        self.P1 = pygame.transform.scale(self.P1, (int(width/1.7), int(height/1.7)))
 
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Tutorial", 1, (255,120,0))
+        tutorial_text = self.font.render("Welcome to the BattlePort Tutorial.", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
+        screen.blit(self.P1, (self.width/2.5, self.height/2.7))
+        screen.blit(tutorial_text,((self.width / 2.5 ) , (self.height / 2.7)))
         self.back_to_menu.mouse_action(screen)
         self.back_to_game.mouse_action(screen)
         Application.back(self)
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]:
-            if self.page != 3:
-                self.page += 1
-            else:
-                pass
-        if keys[pygame.K_LEFT]:
-            if self.page != 1:
-                self.page -= 1
-            else:
-                pass
-
-        if self.page == 1:
-            screen.blit(self.P1, (self.width/5, self.height/5))
-        elif self.page == 2:
-            screen.blit(self.P2, (self.width/5, self.height/5))
-        elif self.page == 3:
-            screen.blit(self.P3, (self.width/5, self.height/5))
+       
+        
 
 class Victory:
     def __init__ (self, application, width, height):
