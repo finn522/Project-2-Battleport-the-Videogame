@@ -6,7 +6,7 @@ from pygame.locals import*
 import sys
 import math
 import random
-from Database import *
+import psycopg2
 
 class Application:
     def __init__(self):
@@ -28,6 +28,7 @@ class Application:
         self.tutorial = Tutorial(self, self.width, self.height)
         self.pause = Pause(self, self.width, self.height)
         self.victory = Victory(self, self.width, self.height)
+        self.database = Database(self)
         
     def back(self):
         for event in pygame.event.get():
@@ -214,14 +215,15 @@ class Button:
                     if event.type == mouse_click:
                         print (self.text)
                         if self.text == 'Start':
+                            self.DB = self.application.database.update(self.application.game.Cplayer.name)
                             self.application.phase = "game"
                         elif self.text == "Back to menu":
+                            self.DB = self.application.database.update(self.application.game.Cplayer.name)
                             self.application.phase = "intro"
             
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
-
 
 class Game:
     def __init__(self, application, width, height):
@@ -247,9 +249,9 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453, 571, 5, 80, 4, 5, 'Battleship', 'Att', 1)
-        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
-        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att', 1)
+        self.player1.boat1 = Boats(self.application, 453, 571, 0, 80, 4, 5, 'Battleship', 'Att', 1)
+        self.player1.boat2 = Boats(self.application, 490, 610, 0, 3, 3, 4, 'Destroyer', 'Att', 1)
+        self.player1.boat3 = Boats(self.application, 258, 645, 0, 5, 2, 3, 'Gunboat', 'Att', 1)
 
         self.player2.boat1 = Boats(self.application, 458, 0, 5, 80, 4, 5, 'Battleship', 'Att', 1)
         self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
@@ -864,8 +866,8 @@ class Highscore:
         title_text = self.font.render("Highscore", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         self.back_to_menu.mouse_action(screen)
-        self.highscore = get_highscore()
         Application.back(self)
+        self.get = self.application.database.get_score()
 
 class Tutorial:
     def __init__ (self, application, width, height):
@@ -937,6 +939,42 @@ class Victory:
         screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
         self.back_to_menu_button.mouse_action(screen)
         self.replay_button.mouse_action(screen)
+
+class Database:
+    def __init__(self, application):
+        self.application = application
+        
+    def create(self):
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
+        self.cur = self.conn.cursor()
+        self.cur.execute("DROP TABLE IF EXISTS Highscores;")
+        self.cur.execute("CREATE TABLE Highscores (player_name varchar PRIMARY KEY, total_wins integer);")
+        self.conn.commit()
+        self.cur.close()
+        self.conn.close()
+
+    def update(self, Name): 
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
+        self.cur = self.conn.cursor()
+        self.cur.execute("UPDATE Highscores SET total_wins = total_wins + 1 WHERE player_name = 'Jeroen'")
+        self.conn.commit()
+        self.cur.close()
+        self.conn.close()
+
+    def get_score (self):
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
+        self.cur = self.conn.cursor()
+        self.cur.execute("SELECT * FROM Highscores")
+        self.results = None
+        try:
+            self.results = self.cur.fetchall()
+        except psycopg2.ProgrammingError:
+            pass
+        self.cur.fetchone()
+        self.conn.commit()
+        self.cur.close()
+        self.conn.close()
+        return self.results
 
 def process_events():
     for event in pygame.event.get():
