@@ -1,4 +1,4 @@
-# Copyright 2017
+    # Copyright 2017
 # Simon de Bakker, Raoul van Duivenvoorde, Jeroen de Schepper
 
 import pygame
@@ -15,9 +15,10 @@ class Application:
         self.size = (self.width, self.height)
      
         pygame.init()
+
         pygame.display.set_caption('BattlePort')
-        self.VicSound = pygame.mixer.Sound('C:\School\Git2\Project-2\Sounds\BurkeBlack.wav')
-        pygame.mixer.music.load('C:\School\Git2\Project-2\Sounds\BGM.wav')
+        self.VicSound = pygame.mixer.Sound('BurkeBlack.wav')
+        pygame.mixer.music.load('BGM.wav')
     
         self.screen = pygame.display.set_mode((self.size))#, pygame.FULLSCREEN)
         self.phase = "intro"
@@ -241,6 +242,7 @@ class Button:
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
 class Game:
+
     def __init__(self, application, width, height):
         self.application = application
         self.pause = Pause
@@ -805,6 +807,7 @@ class Boats:
         self.type = type
         self.Mode = mode
         self.position = (self.width, self.height)
+
     def draw(self, screen):
         # Screen blit topview boats player 1
         if self.player1.boat1.Mode == 'Att':
@@ -933,7 +936,6 @@ class VictoryP1:
         self.width = width
         self.height = height
 
-
     def draw (self, screen):
         screen.blit(self.Background,(0, 0))
         title_text = self.font.render("Victory", 1, (255,120,0))
@@ -943,7 +945,6 @@ class VictoryP1:
         self.back_to_menu_button.mouse_action(screen)
         self.replay_button.mouse_action(screen)
         
-
 class VictoryP2:
     def __init__ (self, application, width, height):
         self.application = application
@@ -956,7 +957,6 @@ class VictoryP2:
         self.width = width
         self.height = height
 
-
     def draw (self, screen):
         screen.blit(self.Background,(0, 0))
         title_text = self.font.render("Victory", 1, (255,120,0))
@@ -965,6 +965,7 @@ class VictoryP2:
         screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
         self.back_to_menu_button.mouse_action(screen)
         self.replay_button.mouse_action(screen)
+
 def process_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -975,3 +976,27 @@ def program():
     application.application_loop()
 
 program()
+
+
+"""
+var btnCheck = event.type == MOUSEBUTTONDOWN
+    def a(bool btnCheck):
+       if btnCheck:
+        print('Draai schip')
+
+    def b(bool btnCheck):
+        if btnCheck:
+            print('move ship')
+-----------------------------------------
+var x = false
+var y = false
+
+----------------------
+var x = input.mousebtn[0] //true or false
+...
+if x != y: 
+    mosue btn is pressed
+
+var y = input.mousebtn[0] true or false
+-----------------------
+"""
