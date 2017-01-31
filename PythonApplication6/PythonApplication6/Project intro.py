@@ -729,33 +729,56 @@ class Game:
         if self.player1.boat3.height - (self.height/5.6) + 71.4 <= self.player2.boat3.height and (self.player1.boat3.height + (self.height/5.6)) - 71.4 >= self.player2.boat3.height and (35.7 * (self.player1.boat3.Attrange)) + self.player1.boat3.width > self.player2.boat3.width and self.player1.boat3.width - (35.7 * (self.player1.boat3.Attrange)) < self.player2.boat3.width:
            self.player2.boat3.LifePoints -= 1
 
-    # achteruit aanvallen nog aanpassen
     def attackP2B1(self):
         #Vertical
-        if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat1.height and (self.player2.boat1.width >= (self.player1.boat1.width - 3)) and self.player2.boat1.width < (self.player1.boat1.width + 30):
+        if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat1.height and self.player2.boat1.height <= self.player1.boat1.height and (self.player2.boat1.width >= (self.player1.boat1.width - 3)) and self.player2.boat1.width < (self.player1.boat1.width + 30):
             self.player1.boat1.LifePoints -= 1
-        if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat2.height and (self.player2.boat1.width >= (self.player1.boat2.width - 10)) and self.player2.boat1.width < (self.player1.boat2.width + 20):
+        if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat2.height and self.player2.boat1.height <= self.player1.boat2.height and (self.player2.boat1.width >= (self.player1.boat2.width - 10)) and self.player2.boat1.width < (self.player1.boat2.width + 20):
             self.player1.boat2.LifePoints -= 1
-        if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat3.height and (self.player2.boat1.width >= (self.player1.boat3.width)) and self.player2.boat1.width < (self.player1.boat3.width + 30):
+        if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat3.height and self.player2.boat1.height <= self.player1.boat3.height and (self.player2.boat1.width >= (self.player1.boat3.width)) and self.player2.boat1.width < (self.player1.boat3.width + 30):
             self.player1.boat3.LifePoints -= 1
+
+        #Horizontal
+        if self.player2.boat1.height + (self.height/5.6) >= self.player1.boat1.height and (self.player2.boat1.height - (self.height/5.6)) <= self.player1.boat1.height and (35.7 * (self.player2.boat1.Attrange)) + self.player2.boat1.width > self.player1.boat1.width and self.player2.boat1.width - (35.7 * (self.player2.boat1.Attrange + 1)) < self.player1.boat1.width:
+           self.player1.boat1.LifePoints -= 1
+        if self.player2.boat1.height + (self.height/5.6) >= self.player1.boat2.height and (self.player2.boat1.height - (self.height/5.6) + 35.7) <= self.player1.boat2.height and (35.7 * (self.player2.boat1.Attrange)) + self.player2.boat1.width > self.player1.boat2.width and self.player2.boat1.width - (35.7 * (self.player2.boat1.Attrange + 1)) < self.player1.boat2.width:
+           self.player1.boat2.LifePoints -= 1
+        if self.player2.boat1.height + (self.height/5.6) >= self.player1.boat3.height and (self.player2.boat1.height - (self.height/5.6) + 71.4) <= self.player1.boat3.height and (35.7 * (self.player2.boat1.Attrange)) + self.player2.boat1.width > self.player1.boat3.width and self.player2.boat1.width - (35.7 * (self.player2.boat1.Attrange + 1)) < self.player1.boat3.width:
+           self.player1.boat3.LifePoints -= 1
 
     def attackP2B2(self):
         #Vertical
-        if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat1.height + 35.7) and (self.player2.boat2.width >= (self.player1.boat1.width - 10)) and self.player2.boat2.width < (self.player1.boat1.width + 20):
+        if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat1.height + 35.7) and self.player2.boat2.height <= self.player1.boat1.height and (self.player2.boat2.width >= (self.player1.boat1.width - 10)) and self.player2.boat2.width < (self.player1.boat1.width + 20):
             self.player1.boat1.LifePoints -= 1
-        if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat2.height + 71.4) and (self.player2.boat2.width >= (self.player1.boat2.width - 10)) and self.player2.boat2.width < (self.player1.boat2.width + 20):
+        if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat2.height + 71.4) and self.player2.boat2.height <= self.player1.boat2.height and (self.player2.boat2.width >= (self.player1.boat2.width - 10)) and self.player2.boat2.width < (self.player1.boat2.width + 20):
             self.player1.boat2.LifePoints -= 1
-        if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat3.height + 71.4) and (self.player2.boat2.width >= (self.player1.boat3.width - 20)) and self.player2.boat2.width < (self.player1.boat3.width + 30):
+        if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat3.height + 71.4) and self.player2.boat2.height <= self.player1.boat3.height and (self.player2.boat2.width >= (self.player1.boat3.width - 20)) and self.player2.boat2.width < (self.player1.boat3.width + 30):
             self.player1.boat3.LifePoints -= 1
+
+        #Horizontal
+        if self.player2.boat2.height + (self.height/5.6) - 35.7 >= self.player1.boat1.height and (self.player2.boat2.height - (self.height/5.6)) <= self.player1.boat1.height and (35.7 * (self.player2.boat2.Attrange + 1)) + self.player2.boat2.width > self.player1.boat1.width and self.player2.boat2.width - (35.7 * (self.player2.boat2.Attrange)) < self.player1.boat1.width:
+           self.player1.boat1.LifePoints -= 1
+        if self.player2.boat2.height + (self.height/5.6) - 35.7 >= self.player1.boat2.height and (self.player2.boat2.height - (self.height/5.6) + 35.7) <= self.player1.boat2.height and (35.7 * (self.player2.boat2.Attrange + 1)) + self.player2.boat2.width > self.player1.boat2.width and self.player2.boat2.width - (35.7 * (self.player2.boat2.Attrange)) < self.player1.boat2.width:
+           self.player1.boat2.LifePoints -= 1
+        if self.player2.boat2.height + (self.height/5.6) - 35.7 >= self.player1.boat3.height and (self.player2.boat2.height - (self.height/5.6) + 71.4) <= self.player1.boat3.height and (35.7 * (self.player2.boat2.Attrange)) + self.player2.boat2.width > self.player1.boat3.width and self.player2.boat2.width - (35.7 * (self.player2.boat2.Attrange + 1)) < self.player1.boat3.width:
+           self.player1.boat3.LifePoints -= 1
 
     def attackP2B3(self):
         #Vertical
-        if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat1.height + 71.4) and (self.player2.boat3.width >= (self.player1.boat1.width - 20)) and self.player2.boat3.width < (self.player1.boat1.width + 10):
+        if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat1.height + 71.4) and self.player2.boat3.height <= self.player1.boat1.height and (self.player2.boat3.width >= (self.player1.boat1.width - 20)) and self.player2.boat3.width < (self.player1.boat1.width + 10):
             self.player1.boat1.LifePoints -= 1
-        if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat2.height + 71.4) and (self.player2.boat3.width >= (self.player1.boat2.width - 20)) and self.player2.boat3.width < (self.player1.boat2.width + 10):
+        if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat2.height + 71.4) and self.player2.boat3.height <= self.player1.boat2.height and (self.player2.boat3.width >= (self.player1.boat2.width - 20)) and self.player2.boat3.width < (self.player1.boat2.width + 10):
             self.player1.boat2.LifePoints -= 1
-        if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat3.height + 71.4) and (self.player2.boat3.width >= (self.player1.boat3.width - 20)) and self.player2.boat3.width < (self.player1.boat3.width + 10):
+        if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat3.height + 71.4) and self.player2.boat3.height <= self.player1.boat3.height and (self.player2.boat3.width >= (self.player1.boat3.width - 20)) and self.player2.boat3.width < (self.player1.boat3.width + 10):
             self.player1.boat3.LifePoints -= 1
+
+        #Horizontal
+        if self.player2.boat3.height + (self.height/5.6) - 71.4 >= self.player1.boat1.height and (self.player2.boat3.height - (self.height/5.6)) <= self.player1.boat1.height and (35.7 * (self.player2.boat3.Attrange + 1)) + self.player2.boat3.width > self.player1.boat1.width and self.player2.boat3.width - (35.7 * (self.player2.boat3.Attrange)) < self.player1.boat1.width:
+           self.player1.boat1.LifePoints -= 1
+        if self.player2.boat3.height + (self.height/5.6) - 71.4 >= self.player1.boat2.height and (self.player2.boat3.height - (self.height/5.6) + 35.7) <= self.player1.boat2.height and (35.7 * (self.player2.boat3.Attrange + 1)) + self.player2.boat3.width > self.player1.boat2.width and self.player2.boat3.width - (35.7 * (self.player2.boat3.Attrange)) < self.player1.boat2.width:
+           self.player1.boat2.LifePoints -= 1
+        if self.player2.boat3.height + (self.height/5.6) - 71.4 >= self.player1.boat3.height and (self.player2.boat3.height - (self.height/5.6) + 71.4) <= self.player1.boat3.height and (35.7 * (self.player2.boat3.Attrange)) + self.player2.boat3.width > self.player1.boat3.width and self.player2.boat3.width - (35.7 * (self.player2.boat3.Attrange + 1)) < self.player1.boat3.width:
+           self.player1.boat3.LifePoints -= 1
 
     def movement(self, screen, Cplayer):
         mouse_pos = pygame.mouse.get_pos()
