@@ -136,9 +136,9 @@ class Button:
                             self.application.game.Cplayer.boat1.Fuel = 80
                             self.application.game.Cplayer.boat2.Fuel = 80
                             self.application.game.Cplayer.boat3.Fuel = 80
-                            self.application.game.Cplayer.boat1.AttPoints = 1
-                            self.application.game.Cplayer.boat2.AttPoints = 1
-                            self.application.game.Cplayer.boat3.AttPoints = 1
+                            self.application.game.Cplayer.boat1.AttPoints = 10
+                            self.application.game.Cplayer.boat2.AttPoints = 10
+                            self.application.game.Cplayer.boat3.AttPoints = 10
                             self.application.game.GunboatMovement = False
                             self.application.game.DestroyerMovement = False
                             self.application.game.BattleshipMovement = False
@@ -237,7 +237,8 @@ class Game:
         self.font = pygame.font.SysFont('Arial', 150)
         self.font_name_text = pygame.font.SysFont('Arial', 18)
         self.font_FUEL = pygame.font.SysFont('Arial', 25)
-        
+        self.font_enemyhp = pygame.font.SysFont('Arial', 50)
+
         self.BattleshipMovement = False
         self.GunboatMovement = False
         self.DestroyerMovement = False
@@ -247,9 +248,9 @@ class Game:
         self.player2 = Player(self.application, "Player 2")
 
         # Set up the boats
-        self.player1.boat1 = Boats(self.application, 453, 571, 1, 2, 4, 5, 'Battleship', 'Att', 1)
-        self.player1.boat2 = Boats(self.application, 490, 610, 1, 3, 3, 4, 'Destroyer', 'Att', 1)
-        self.player1.boat3 = Boats(self.application, 258, 645, 1, 5, 2, 3, 'Gunboat', 'Att', 1)
+        self.player1.boat1 = Boats(self.application, 453, 571, 5, 2, 4, 5, 'Battleship', 'Att', 1)
+        self.player1.boat2 = Boats(self.application, 490, 610, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
+        self.player1.boat3 = Boats(self.application, 258, 645, 3, 5, 2, 3, 'Gunboat', 'Att', 1)
 
         self.player2.boat1 = Boats(self.application, 458, 0, 5, 2, 4, 5, 'Battleship', 'Att', 1)
         self.player2.boat2 = Boats(self.application, 482, 0, 4, 3, 3, 4, 'Destroyer', 'Att', 1)
@@ -263,7 +264,6 @@ class Game:
         self.sprites(self.width, self.height)
         self.boat(self.width, self.height)
         self.ships_count (self.width, self.height)
-        self.card(self.width, self.height)
 
     def sprites(self, width, height):
         # Sprites Lifepoints
@@ -368,11 +368,6 @@ class Game:
         self.Ship_rem_p2 = pygame.image.load("Ship_Rem_P2.png")
         self.Ship_rem_p2 = pygame.transform.scale(self.Ship_rem_p2, (int(width /80), int(height /25)))
 
-    def card(self, width, height):
-        self.Backcard = pygame.image.load("Back.png")
-        self.Backcard = pygame.transform.scale(self.Backcard, (int(width /10.95), int(height /3.65)))
-        self.BackcardRotate = pygame.transform.rotate(self.Backcard, (-90))
-
     def draw(self, screen):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
@@ -417,11 +412,7 @@ class Game:
 
         # Screen blit life sprites
         self.HP(screen)
-    
-        # Blit back cards
-        screen.blit(self.Backcard, (1015, 11))
-        screen.blit(self.Backcard, (1147, 11))  
-        screen.blit(self.BackcardRotate, (1043, 223))
+        self.HP2(screen)
         
         # Screen blit topview boats player 1 & 2
         self.boats.draw(self,screen)        
@@ -610,6 +601,46 @@ class Game:
                     if self.Cplayer.boat3.LifePoints <= 0:
                         screen.blit(self.Gunboat0HP, (80,23))
 
+    def HP2(self, screen):
+        self.current_player_text = self.font_enemyhp.render(("Enemies fleet"), 1, (255, 120, 0))
+        screen.blit(self.current_player_text, ((self.width / 1.25), (self.height / 30)))
+        # check current player
+        if self.application.game.turn.turn % 2 != 0:
+            self.Eplayer = self.application.game.player2
+        else:
+            self.Eplayer = self.application.game.player1
+        # blit health points
+        if self.Eplayer.boat1.LifePoints <= 5:
+            screen.blit(self.BattleshipHP, (1050,240))
+            if self.Eplayer.boat1.LifePoints <= 4:
+                screen.blit(self.Battleship4HP, (1050,240))
+                if self.Eplayer.boat1.LifePoints <= 3:
+                    screen.blit(self.Battleship3HP, (1050,240))
+                    if self.Eplayer.boat1.LifePoints <= 2:
+                        screen.blit(self.Battleship2HP, (1050,240))
+                        if self.Eplayer.boat1.LifePoints <= 1:
+                            screen.blit(self.Battleship1HP, (1050,240))
+                            if self.Eplayer.boat1.LifePoints <= 0:
+                                screen.blit(self.Battleship0HP, (1050,240))
+        if self.Eplayer.boat2.LifePoints <= 4:
+            screen.blit(self.DestroyerHP, (1050,150))
+            if self.Eplayer.boat2.LifePoints <= 3:
+                screen.blit(self.Destroyer3HP, (1050,150))
+                if self.Eplayer.boat2.LifePoints <= 2:
+                    screen.blit(self.Destroyer2HP, (1050,150))
+                    if self.Eplayer.boat2.LifePoints <= 1:
+                        screen.blit(self.Destroyer1HP, (1050,150))
+                        if self.Eplayer.boat2.LifePoints <= 0:
+                            screen.blit(self.Destroyer0HP, (1050,150))
+        if self.Eplayer.boat3.LifePoints <= 3:
+            screen.blit(self.GunboatHP, (1050,80))
+            if self.Eplayer.boat3.LifePoints <= 2:
+                screen.blit(self.Gunboat2HP, (1050,80))
+                if self.Eplayer.boat3.LifePoints <= 1:
+                    screen.blit(self.Gunboat1HP, (1050,80))
+                    if self.Eplayer.boat3.LifePoints <= 0:
+                        screen.blit(self.Gunboat0HP, (1050,80))
+
     def blit_diamants(self, screen):
         # names
         self.name_tekst = self.font_name_text.render(self.player1.name, 1, (255,120,0))
@@ -648,6 +679,7 @@ class Game:
             self.player1.boat1.height += 35.7
 
     def attackP1B1(self):
+        #Vertical
         if (self.player1.boat1.height - (self.height/5.6) - (35.7 * self.player1.boat1.Attrange)) < self.player2.boat1.height and (self.player2.boat1.width >= (self.player1.boat1.width - 3)) and self.player2.boat1.width < (self.player1.boat1.width + 20):
             self.player2.boat1.LifePoints -= 1
         if (self.player1.boat1.height - (self.height/5.6) - (35.7 * self.player1.boat1.Attrange)) < (self.player2.boat2.height - 35.7) and (self.player2.boat2.width >= (self.player1.boat1.width - 10)) and self.player2.boat2.width < (self.player1.boat1.width + 20):
@@ -655,7 +687,12 @@ class Game:
         if (self.player1.boat1.height - (self.height/5.6) - (35.7 * self.player1.boat1.Attrange)) < (self.player2.boat3.height - 71.4) and (self.player2.boat3.width >= (self.player1.boat1.width - 20)) and self.player2.boat3.width < (self.player1.boat1.width + 10):
             self.player2.boat3.LifePoints -= 1
 
+        #Horizontal
+        if self.player1.boat1.height - (self.height/5.6) <= self.player2.boat1.height and (self.player1.boat1.height + (self.height/5.6)) >= self.player2.boat1.height and (35.7 * self.player1.boat1.Attrange) + self.player1.boat1.width > self.player2.boat1.width:
+           self.player2.boat1.LifePoints -= 1
+
     def attackP1B2(self):
+        #Vertical
         if (self.player1.boat2.height - (self.height/5.6) - (35.7 * self.player1.boat2.Attrange)) < self.player2.boat1.height and (self.player2.boat1.width >= (self.player1.boat2.width - 3)) and self.player2.boat1.width < (self.player1.boat2.width + 20):
             self.player2.boat1.LifePoints -= 1
         if (self.player1.boat2.height - (self.height/5.6) - (35.7 * self.player1.boat2.Attrange)) < (self.player2.boat2.height - 35.7) and (self.player2.boat2.width >= (self.player1.boat2.width - 10)) and self.player2.boat2.width < (self.player1.boat2.width + 20):
@@ -664,6 +701,7 @@ class Game:
             self.player2.boat3.LifePoints -= 1
 
     def attackP1B3(self):
+        #Vertical
         if (self.player1.boat3.height - (self.height/5.6) - (35.7 * self.player1.boat3.Attrange)) < self.player2.boat1.height and (self.player2.boat1.width >= (self.player1.boat3.width - 3)) and self.player2.boat1.width < (self.player1.boat3.width + 30):
             self.player2.boat1.LifePoints -= 1
         if (self.player1.boat3.height - (self.height/5.6) - (35.7 * self.player1.boat3.Attrange)) < (self.player2.boat2.height - 35.7) and (self.player2.boat2.width >= (self.player1.boat3.width - 10)) and self.player2.boat2.width < (self.player1.boat3.width + 20):
@@ -672,6 +710,7 @@ class Game:
             self.player2.boat3.LifePoints -= 1
 
     def attackP2B1(self):
+        #Vertical
         if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat1.height and (self.player2.boat1.width >= (self.player1.boat1.width - 3)) and self.player2.boat1.width < (self.player1.boat1.width + 30):
             self.player1.boat1.LifePoints -= 1
         if (self.player2.boat1.height + (self.height/5.6) + (35.7 * self.player2.boat1.Attrange)) > self.player1.boat2.height and (self.player2.boat1.width >= (self.player1.boat2.width - 10)) and self.player2.boat1.width < (self.player1.boat2.width + 20):
@@ -680,6 +719,7 @@ class Game:
             self.player1.boat3.LifePoints -= 1
 
     def attackP2B2(self):
+        #Vertical
         if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat1.height + 35.7) and (self.player2.boat2.width >= (self.player1.boat1.width - 10)) and self.player2.boat2.width < (self.player1.boat1.width + 20):
             self.player1.boat1.LifePoints -= 1
         if (self.player2.boat2.height + (self.height/5.6) + (35.7 * self.player2.boat2.Attrange)) > (self.player1.boat2.height + 71.4) and (self.player2.boat2.width >= (self.player1.boat2.width - 10)) and self.player2.boat2.width < (self.player1.boat2.width + 20):
@@ -688,6 +728,7 @@ class Game:
             self.player1.boat3.LifePoints -= 1
 
     def attackP2B3(self):
+        #Vertical
         if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat1.height + 71.4) and (self.player2.boat3.width >= (self.player1.boat1.width - 20)) and self.player2.boat3.width < (self.player1.boat1.width + 10):
             self.player1.boat1.LifePoints -= 1
         if (self.player2.boat3.height + (self.height/5.6) + (35.7 * self.player2.boat3.Attrange)) > (self.player1.boat2.height + 71.4) and (self.player2.boat3.width >= (self.player1.boat2.width - 20)) and self.player2.boat3.width < (self.player1.boat2.width + 10):
@@ -963,7 +1004,7 @@ class Tutorial:
         self.back_to_game.mouse_action(screen)
         Application.back(self)
 
-class Victory:
+class Victory:  
     def __init__ (self, application, width, height):
         self.application = application
         self.Background = pygame.image.load("VictoryBG.jpg")
@@ -992,7 +1033,7 @@ class Database:
         self.font = pygame.font.SysFont('Arial', 50)
 
     def create(self):
-        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=f95fa4e4")
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
         self.cur = self.conn.cursor()
         self.cur.execute("DROP TABLE IF EXISTS Highscores;")
         self.cur.execute("CREATE TABLE Highscores (player_name varchar PRIMARY KEY, total_wins integer);")
@@ -1001,7 +1042,7 @@ class Database:
         self.conn.close()
 
     def update(self, Name): 
-        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=f95fa4e4")
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
         self.cur = self.conn.cursor()
         self.cur.execute("UPDATE highscores SET total_wins = total_wins + 1 WHERE player_name = '{}'".format(self.application.game.Cplayer.name))
         print(self.application.game.Cplayer.name)
@@ -1010,9 +1051,9 @@ class Database:
         self.conn.close()
 
     def get_score (self, screen):
-        self.x = 640
-        self.y = 360
-        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=f95fa4e4")
+        self.x = self.width
+        self.y = self.height
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
         self.cur = self.conn.cursor()
         self.cur.execute("SELECT * FROM Highscores ORDER by total_wins DESC")
         self.HSveld = pygame.image.load("tekstveld1.png")
@@ -1021,8 +1062,8 @@ class Database:
         
         for row in self.cur:
             ScoreDisplay = self.font.render(str(row), 0, (255,120,0))
-            screen.blit(ScoreDisplay, ((self.x),(self.y)))
-            self.y += 50
+            screen.blit(ScoreDisplay, ((self.x / 2),(self.y / 2)))
+            self.y += 100
 
         self.conn.commit()
         self.cur.close()
