@@ -39,7 +39,7 @@ class Application:
                     self.application.phase = "pause"
 
     def application_loop(self):
-        #pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(-1)
         while not process_events():
             self.event = pygame.event.get()
             if self.phase == "intro":
@@ -93,6 +93,7 @@ class Button:
         self.w = w
         self.h = h
         self.surface = pygame.Surface((w, h))
+        self.reset = Reset(self.application)
         
     def mouse_action (self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -162,6 +163,7 @@ class Button:
                         
                         print (self.text)
                         if self.text == '  Yes':
+                            self.reset.reset()
                             self.application.phase = "intro"
                         if self.text  == '   No':
                             self.application.phase = "game"
@@ -211,10 +213,10 @@ class Button:
                     if event.type == mouse_click:
                         print (self.text)
                         if self.text == 'Replay':
-########################### PLACE CODE HERE TO RESET GAME VALUES ###########################
+                            self.reset.reset()
                             self.application.phase = "game"
                         elif self.text == "Back to menu":
-########################### PLACE CODE HERE TO RESET GAME VALUES ###########################
+                            self.reset.reset()
                             self.application.phase = "intro"
             
             else:
@@ -922,7 +924,7 @@ class Database:
         self.font = pygame.font.SysFont('Arial', 50)
 
     def create(self):
-        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=f95fa4e4")
         self.cur = self.conn.cursor()
         self.cur.execute("DROP TABLE IF EXISTS Highscores;")
         self.cur.execute("CREATE TABLE Highscores (player_name varchar PRIMARY KEY, total_wins integer);")
@@ -931,7 +933,7 @@ class Database:
         self.conn.close()
 
     def update(self, Name): 
-        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=f95fa4e4")
         self.cur = self.conn.cursor()
         self.cur.execute("UPDATE highscores SET total_wins = total_wins + 1 WHERE player_name = '{}'".format(self.application.game.Cplayer.name))
         print(self.application.game.Cplayer.name)
@@ -942,7 +944,7 @@ class Database:
     def get_score (self, screen):
         self.x = 640
         self.y = 360
-        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=080396-jeroen")
+        self.conn = psycopg2.connect("dbname=BattleportHighscore user=postgres password=f95fa4e4")
         self.cur = self.conn.cursor()
         self.cur.execute("SELECT * FROM Highscores ORDER by total_wins DESC")
         self.HSveld = pygame.image.load("tekstveld1.png")
@@ -958,6 +960,33 @@ class Database:
         self.cur.close()
         self.conn.close()
 
+class Reset:
+    def __init__(self, application):
+        self.application = application
+    def reset(self):
+        self.application.game.player1.boat1.LifePoints = 5
+        self.application.game.player1.boat2.LifePoints = 4
+        self.application.game.player1.boat3.LifePoints = 3
+        self.application.game.player2.boat1.LifePoints = 5
+        self.application.game.player2.boat2.LifePoints = 4
+        self.application.game.player2.boat3.LifePoints = 3
+        self.application.game.player1.boat1.width = 453
+        self.application.game.player1.boat2.width = 490     
+        self.application.game.player1.boat3.width = 258
+        self.application.game.player2.boat1.width = 458
+        self.application.game.player2.boat2.width = 482     
+        self.application.game.player2.boat3.width = 258
+        self.application.game.player1.boat1.height = 571
+        self.application.game.player1.boat2.height = 610
+        self.application.game.player1.boat3.height = 645
+        self.application.game.player2.boat1.height = 0
+        self.application.game.player2.boat2.height = 0
+        self.application.game.player2.boat3.height = 0
+        self.application.game.GunboatMovement = False
+        self.application.game.DestroyerMovement = False
+        self.application.game.BattleshipMovement = False
+        self.application.game.turn.turn = 1
+
 def process_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -968,7 +997,6 @@ def program():
     application.application_loop()
 
 program()
-
 
 """
 var btnCheck = event.type == MOUSEBUTTONDOWN
