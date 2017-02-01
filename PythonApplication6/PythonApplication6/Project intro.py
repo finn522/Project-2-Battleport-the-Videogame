@@ -199,6 +199,12 @@ class Button:
                             self.application.phase = "intro"
                         if self.text == "Back to game / start game":
                             self.application.phase = "game"
+                        if self.text == "Previous":
+                            if self.application.tutorial.page > 1:
+                                self.application.tutorial.page -= 1
+                        if self.text == "Next":
+                            if self.application.tutorial.page < 8:
+                                self.application.tutorial.page += 1
             else:
                 button_text = self.font.render(self.text, 1, (255,120,0))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
@@ -1057,23 +1063,64 @@ class Tutorial:
         self.font = pygame.font.SysFont('Arial', 150)
         self.width = width
         self.height = height
+        self.page = 1
 
         self.back_to_menu = Button(self.application, ("Back to menu"), (width/15), (height/1.25), 205, 40)
         self.back_to_game = Button(self.application, ("Back to game / start game"), (width/15), (height/1.4), 205, 40)
+        self.previous = Button(self.application, ("Previous"), (width/15), (height/1.55), 205, 40)
+        self.next = Button(self.application, ("Next"), (width/5), (height/1.55), 205, 40)
     
-        self.P1 = pygame.image.load("tekstveld1.png")
+        self.P1 = pygame.image.load("Panel1.png")
         self.P1 = pygame.transform.scale(self.P1, (int(width/1.7), int(height/1.7)))
+
+        self.P2 = pygame.image.load("Panel2.png")
+        self.P2 = pygame.transform.scale(self.P2, (int(width/1.7), int(height/1.7)))
+
+        self.P3 = pygame.image.load("Panel3.png")
+        self.P3 = pygame.transform.scale(self.P3, (int(width/1.7), int(height/1.7)))
+
+        self.P4 = pygame.image.load("Panel4.png")
+        self.P4 = pygame.transform.scale(self.P4, (int(width/1.7), int(height/1.7)))
+
+        self.P5 = pygame.image.load("Panel5.png")
+        self.P5 = pygame.transform.scale(self.P5, (int(width/1.7), int(height/1.7)))
+    
+        self.P6 = pygame.image.load("Panel6.png")
+        self.P6 = pygame.transform.scale(self.P6, (int(width/1.7), int(height/1.7)))
+
+        self.P7 = pygame.image.load("Panel7.png")
+        self.P7 = pygame.transform.scale(self.P7, (int(width/1.7), int(height/1.7)))
+
+        self.P8 = pygame.image.load("Panel8.png")
+        self.P8 = pygame.transform.scale(self.P8, (int(width/1.7), int(height/1.7)))
 
     def draw (self, screen):
         screen.blit(self.Background,(0,0))
         title_text = self.font.render("Tutorial", 1, (255,120,0))
-        tutorial_text = self.font.render("Welcome to the BattlePort Tutorial.", 1, (255,120,0))
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
-        screen.blit(self.P1, (self.width/2.5, self.height/2.7))
-        screen.blit(tutorial_text,((self.width / 2.5 ) , (self.height / 2.7)))
+        screen.blit(self.P2, (self.width/2.5, self.height/2.7))
         self.back_to_menu.mouse_action(screen)
         self.back_to_game.mouse_action(screen)
+        self.previous.mouse_action(screen)
+        self.next.mouse_action(screen)
         Application.back(self)
+
+        if self.page == 1:
+            screen.blit(self.P1, (self.width/2.5, self.height/2.7))
+        elif self.page == 2:
+            screen.blit(self.P2, (self.width/2.5, self.height/2.7))
+        elif self.page == 3:
+            screen.blit(self.P3, (self.width/2.5, self.height/2.7))
+        elif self.page == 4:
+            screen.blit(self.P4, (self.width/2.5, self.height/2.7))
+        elif self.page == 5:
+            screen.blit(self.P5, (self.width/2.5, self.height/2.7))
+        elif self.page == 6:
+            screen.blit(self.P6, (self.width/2.5, self.height/2.7))
+        elif self.page == 7:
+            screen.blit(self.P7, (self.width/2.5, self.height/2.7))
+        elif self.page == 8:
+            screen.blit(self.P8, (self.width/2.5, self.height/2.7))
 
 class Victory:  
     def __init__ (self, application, width, height):
