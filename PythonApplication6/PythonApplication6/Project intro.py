@@ -441,11 +441,18 @@ class Game:
                         if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/4.42) + 55 > mouse_pos[1] > (self.height/4.42):
                             screen.blit(self.ShipAttPushed, (self.width/86, self.height/4.42))
                             if self.application.game.Cplayer.boat3.AttPoints > 0:
-                                if self.Cplayer == self.application.game.player1:
-                                    self.attackP1B3()
-                                elif self.Cplayer == self.application.game.player2:
-                                    self.attackP2B3()
+                                if self.Cplayer.boat3.Mode == 'Att':
+                                    if self.Cplayer == self.application.game.player1:
+                                        self.attackP1B3()
+                                    elif self.Cplayer == self.application.game.player2:
+                                        self.attackP2B3()
+                                elif self.Cplayer.boat3.Mode == 'Deff':
+                                    if self.Cplayer == self.application.game.player1:
+                                        pass
+                                    elif self.Cplayer == self.application.game.player2:
+                                        pass
                                 self.application.game.Cplayer.boat3.AttPoints -= 1
+                                
                     # Destroyer
                     if self.Cplayer.boat2.LifePoints > 0 :
                         if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/2.6) + 55 > mouse_pos[1] > (self.height/2.6):
@@ -464,10 +471,16 @@ class Game:
                         if (self.width/86) + 55 > mouse_pos[0] > (self.width/86) and (self.height/1.755) + 55 > mouse_pos[1] > (self.height/1.755):
                             screen.blit(self.ShipAttPushed, (self.width/86, self.height/1.755))
                             if self.application.game.Cplayer.boat2.AttPoints > 0:
-                                if self.Cplayer == self.application.game.player1:
-                                    self.attackP1B2()
-                                elif self.Cplayer == self.application.game.player2:
-                                    self.attackP2B2()
+                                if self.Cplayer.boat2.Mode == 'Att':
+                                    if self.Cplayer == self.application.game.player1:
+                                        self.attackP1B2()
+                                    elif self.Cplayer == self.application.game.player2:
+                                        self.attackP2B2()
+                                elif self.Cplayer.boat2.Mode == 'Deff':
+                                    if self.Cplayer == self.application.game.player1:
+                                        pass
+                                    elif self.Cplayer == self.application.game.player2:
+                                        pass
                                 self.application.game.Cplayer.boat2.AttPoints -= 1
                     # Battleship
                     if self.Cplayer.boat1.LifePoints > 0:
@@ -487,10 +500,16 @@ class Game:
                         if (self.width/92) + 55 > mouse_pos[0] > (self.width/92) and (self.height/1.112) + 55 > mouse_pos[1] > (self.height/1.112):
                             screen.blit(self.ShipAttPushed, (self.width/92, self.height/1.112))
                             if self.application.game.Cplayer.boat1.AttPoints > 0:
-                                if self.Cplayer == self.application.game.player1:
-                                    self.attackP1B1()
-                                elif self.Cplayer == self.application.game.player2:
-                                    self.attackP2B1()
+                                if self.Cplayer.boat1.Mode == 'Att':
+                                    if self.Cplayer == self.application.game.player1:
+                                        self.attackP1B1()
+                                    elif self.Cplayer == self.application.game.player2:
+                                        self.attackP2B1()
+                                elif self.Cplayer.boat1.Mode == 'Deff':
+                                    if self.Cplayer == self.application.game.player1:
+                                        self.defenceP1B1()
+                                    elif self.Cplayer == self.application.game.player2:
+                                        pass
                                 self.application.game.Cplayer.boat1.AttPoints -= 1
 
         if self.GunboatMovement == True:
@@ -780,6 +799,10 @@ class Game:
         if self.player2.boat3.height + (self.height/5.6) - 71.4 >= self.player1.boat3.height and (self.player2.boat3.height - (self.height/5.6) + 71.4) <= self.player1.boat3.height and (35.7 * (self.player2.boat3.Attrange)) + self.player2.boat3.width > self.player1.boat3.width and self.player2.boat3.width - (35.7 * (self.player2.boat3.Attrange + 1)) < self.player1.boat3.width:
            self.player1.boat3.LifePoints -= 1
 
+    def defenceP1B1(self):
+        if (self.player1.boat1.height - (35.7 * (self.player1.boat1.Deffrange - 1))) < self.player2.boat1.height and self.player1.boat1.height >= self.player2.boat1.height and (self.player2.boat1.width >= (self.player1.boat1.width - 3)) and self.player2.boat1.width < (self.player1.boat1.width + int(self.height / 4.7) - 35.7):
+            self.player2.boat1.LifePoints -= 1
+
     def movement(self, screen, Cplayer):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
@@ -937,23 +960,23 @@ class Boats:
             if self.player1.boat2.Mode == 'Att':
                 screen.blit(self.Destroyer, (self.application.game.player1.boat2.width, self.application.game.player1.boat2.height))
             elif self.player1.boat2.Mode == 'Deff':
-                screen.blit(self.DestroyerR, (self.application.game.player1.boat2.width, self.application.game.player1.boat2.height))
+                screen.blit(self.DestroyerR, (self.application.game.player1.boat2.width, (self.application.game.player1.boat2.height - 10)))
         else:
             if self.player1.boat2.Mode == 'Att':
                 screen.blit(self.DestroyerDES, (self.application.game.player1.boat2.width, self.application.game.player1.boat2.height))
             elif self.player1.boat2.Mode == 'Deff':
-                screen.blit(self.DestroyerDESR, (self.application.game.player1.boat2.width, self.application.game.player1.boat2.height))
+                screen.blit(self.DestroyerDESR, (self.application.game.player1.boat2.width, ( self.application.game.player1.boat2.height -10)))
 
         if self.player1.boat3.LifePoints > 0:
             if self.player1.boat3.Mode == 'Att':
                 screen.blit(self.Gunboat, (self.application.game.player1.boat3.width, self.application.game.player1.boat3.height))
             elif self.player1.boat3.Mode == 'Deff':
-                screen.blit(self.GunboatR, (self.application.game.player1.boat3.width, self.application.game.player1.boat3.height)) 
+                screen.blit(self.GunboatR, ((self.application.game.player1.boat3.width + 18), (self.application.game.player1.boat3.height -20 ))) 
         else:
             if self.player1.boat3.Mode == 'Att':
                 screen.blit(self.GunboatDES, (self.application.game.player1.boat3.width, self.application.game.player1.boat3.height))
             elif self.player1.boat3.Mode == 'Deff':
-                screen.blit(self.GunboatDESR, (self.application.game.player1.boat3.width, self.application.game.player1.boat3.height))       
+                screen.blit(self.GunboatDESR, ((self.application.game.player1.boat3.width + 18), (self.application.game.player1.boat3.height -20)))       
 
         # Screen blit topview boats player 2
         if self.player2.boat1.LifePoints > 0:
@@ -967,11 +990,11 @@ class Boats:
             elif self.player2.boat1.Mode == 'Deff':
                 screen.blit(self.BattleshipDESP2R, (self.application.game.player2.boat1.width, self.application.game.player2.boat1.height))
 
-        if self.player2.boat2.LifePoints > 0:        
+        if self.player2.boat2.LifePoints > 0:
             if self.player2.boat2.Mode == 'Att':
                 screen.blit(self.Destroyer2, (self.application.game.player2.boat2.width, self.application.game.player2.boat2.height))
             elif self.player2.boat2.Mode == 'Deff':
-                screen.blit(self.Destroyer2R, (self.application.game.player2.boat2.width, self.application.game.player2.boat2.height))
+                screen.blit(self.Destroyer2R, ((self.application.game.player2.boat2.width + 7), self.application.game.player2.boat2.height))
         else:
             if self.player2.boat2.Mode == 'Att':
                 screen.blit(self.DestroyerDESP2, (self.application.game.player2.boat2.width, self.application.game.player2.boat2.height))
@@ -982,12 +1005,12 @@ class Boats:
             if self.player2.boat3.Mode == 'Att':
                 screen.blit(self.Gunboat2, (self.application.game.player2.boat3.width, self.application.game.player2.boat3.height))
             elif self.player2.boat3.Mode == 'Deff':
-                screen.blit(self.Gunboat2R, (self.application.game.player2.boat3.width, self.application.game.player2.boat3.height))
+                screen.blit(self.Gunboat2R, ((self.application.game.player2.boat3.width + 20), (self.application.game.player2.boat3.height + 20)))
         else:
             if self.player2.boat3.Mode == 'Att':
                 screen.blit(self.GunboatDESP2, (self.application.game.player2.boat3.width, self.application.game.player2.boat3.height))
             elif self.player2.boat3.Mode == 'Deff':
-                screen.blit(self.GunboatDES2R, (self.application.game.player2.boat3.width, self.application.game.player2.boat3.height))
+                screen.blit(self.GunboatDES2R, ((self.application.game.player2.boat3.width + 20), self.application.game.player2.boat3.height))
 
 class Pause:
     def __init__ (self, application, width, height):
