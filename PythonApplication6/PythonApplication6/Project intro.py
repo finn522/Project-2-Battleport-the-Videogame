@@ -25,23 +25,31 @@ class Application:
         self.pause = Pause(self, self.width, self.height)
         self.victory = Victory(self, self.width, self.height)
         self.database = Database(self, self.width, self.height)
-        
+        self.mousedown = False
+        self.mouse_pos = pygame.mouse.get_pos()
+        self.events = []
+       
+    def process_events(self):
+        self.events = pygame.event.get()
+        for event in self.events:
+            if event.type == QUIT:
+                sys.exit()
+
     def back(self):
-        for event in pygame.event.get():
+        for event in self.application.events:
             if event.type == KEYDOWN:
                 if event.key == K_BACKSPACE:
                     self.application.phase = "intro"
     
     def exit(self):
-        for event in pygame.event.get():
+        for event in self.application.events:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE or event.key == K_BACKSPACE or event.key == K_p:
                     self.application.phase = "pause"
 
     def application_loop(self):
         pygame.mixer.music.play(-1)
-        while not process_events():
-            self.event = pygame.event.get()
+        while not self.process_events():
             if self.phase == "intro":
                 self.intro.draw(self.screen)
                 self.VicSound.stop()
@@ -65,7 +73,7 @@ class Application:
 class Intro:
     def __init__ (self, application, width, height):
         self.application = application
-        self.Background = pygame.image.load("BackgroundA.jpg") #easteregg
+        self.Background = pygame.image.load("BackgroundA.jpg")
         self.Background = pygame.transform.scale(self.Background, (width, height))
         self.font = pygame.font.SysFont('Arial', 150)
         self.exit_button = Button(self.application, 'Exit', (width/15), (height/1.25), 170, 50)
@@ -105,8 +113,8 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,(( self.x + 5), (self.y + 11)))
 
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
+                for event in self.application.events:
+                    if event.type == MOUSEBUTTONDOWN:
                         print (self.text)
                         if self.text == 'Start':
                             self.application.phase = "game"
@@ -127,8 +135,8 @@ class Button:
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
+                for event in self.application.events:
+                    if event.type == MOUSEBUTTONDOWN:
                         print(self.text)
                         if self.text == 'Pause/Exit':
                             self.application.phase = "pause"                        
@@ -158,8 +166,8 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
+                for event in self.application.events:
+                    if event.type == MOUSEBUTTONDOWN:
                         
                         print (self.text)
                         if self.text == '  Yes':
@@ -178,8 +186,8 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
 
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
+                for event in self.application.events:
+                    if event.type == MOUSEBUTTONDOWN:
                         print (self.text)
                         if self.text == 'Back to menu':
                             self.application.phase = "intro"
@@ -192,8 +200,8 @@ class Button:
             if self.x + self.w > mouse_pos[0] > self.x and self.y + self.h > mouse_pos[1] > self.y:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,((self.x + 5), (self.y + 11)))
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
+                for event in self.application.events:
+                    if event.type == MOUSEBUTTONDOWN:
                         print (self.text)
                         if self.text == "Back to menu":
                             self.application.phase = "intro"
@@ -215,8 +223,8 @@ class Button:
                 button_text = self.font.render(self.text, 1, (255,255,255))
                 screen.blit(button_text,(( self.x + 5), (self.y + 11)))
 
-                for event in pygame.event.get():
-                    if event.type == mouse_click:
+                for event in self.application.events:
+                    if event.type == MOUSEBUTTONDOWN:
                         print (self.text)
                         if self.text == 'Replay':
                             self.reset.reset()
@@ -427,7 +435,8 @@ class Game:
         if self.turn.turn > 2:
             # blit fuel
             self.blit_fuel (screen, self.Cplayer)
-            if mouse_click[0]:
+            for event in self.application.events:
+                if event.type == MOUSEBUTTONDOWN:
                     # check wich button is pushed + actions
                     # Gunboat
                     if self.Cplayer.boat3.LifePoints > 0:
@@ -831,7 +840,13 @@ class Game:
             self.player2.boat3.LifePoints -= 1
 
     def defenceP2B1(self):
-        pass
+        if (self.player2.boat1.height + (35.7 * (self.player2.boat1.Deffrange))) > self.player1.boat1.height and self.player2.boat1.height - (self.height/5.6) - (35.7 * self.player2.boat1.Deffrange) <= self.player1.boat1.height and (self.player1.boat1.width >= (self.player2.boat1.width - 35.7)) and self.player1.boat1.width < (self.player2.boat1.width + int(self.height / 6.2) - 35.7):
+            self.player1.boat1.LifePoints -= 1
+        if (self.player2.boat1.height + (35.7 * (self.player2.boat1.Deffrange + 1))) > self.player1.boat2.height and self.player2.boat1.height - (self.height/5.6) - (35.7 * (self.player2.boat1.Deffrange - 1)) <= self.player1.boat2.height and (self.player1.boat2.width >= (self.player2.boat2.width) - 3) and self.player1.boat2.width < (self.player2.boat1.width + int(self.height / 6.2)):
+            self.player1.boat2.LifePoints -= 1
+        if (self.player2.boat1.height + (35.7 * (self.player2.boat1.Deffrange + 1))) > self.player1.boat3.height and self.player2.boat1.height - (self.height/5.6) - (35.7 * (self.player2.boat1.Deffrange - 2)) <= self.player1.boat3.height and (self.player1.boat3.width >= (self.player2.boat2.width) - 3) and self.player1.boat3.width < (self.player2.boat1.width + int(self.height / 6.2)):
+            self.player1.boat3.LifePoints -= 1
+
     def defenceP2B2(self):
         pass
     def defenceP2B3(self):
@@ -840,7 +855,7 @@ class Game:
     def movement(self, screen, Cplayer):
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
-        for event in pygame.event.get():
+        for event in self.application.events:
             if event.type == MOUSEBUTTONDOWN:
                 # Movement gunboat
                 if self.GunboatMovement == True:
@@ -1242,36 +1257,8 @@ class Reset:
         self.application.game.BattleshipMovement = False
         self.application.game.turn.turn = 1
 
-def process_events():
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
-
 def program():
     application = Application()
     application.application_loop()
 
 program()
-
-"""
-var btnCheck = event.type == MOUSEBUTTONDOWN
-    def a(bool btnCheck):
-       if btnCheck:
-        print('Draai schip')
-
-    def b(bool btnCheck):
-        if btnCheck:
-            print('move ship')
------------------------------------------
-var x = false
-var y = false
-
-----------------------
-var x = input.mousebtn[0] //true or false
-...
-if x != y: 
-    mosue btn is pressed
-
-var y = input.mousebtn[0] true or false
------------------------
-"""
