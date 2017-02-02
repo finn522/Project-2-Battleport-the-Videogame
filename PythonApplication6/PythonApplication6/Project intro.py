@@ -3,20 +3,20 @@
 
 from pygame.locals import*
 import pygame, sys, math, random, psycopg2
-
+ 
 class Application:
     def __init__(self):
         self.width = 1280
         self.height = 720
         self.size = (self.width, self.height)
-     
+
         pygame.init()
 
         pygame.display.set_caption('BattlePort')
         self.VicSound = pygame.mixer.Sound('BurkeBlack.wav')
         pygame.mixer.music.load('BGM.wav')
-    
-        self.screen = pygame.display.set_mode((self.size))#, pygame.FULLSCREEN)
+
+        self.screen = pygame.display.set_mode((self.size), pygame.FULLSCREEN)
         self.phase = "intro"
         self.intro = Intro(self, self.width, self.height)
         self.game = Game(self, self.width, self.height)
@@ -142,7 +142,7 @@ class Button:
                             self.application.game.Cplayer.boat1.Fuel = 2
                             self.application.game.Cplayer.boat2.Fuel = 3
                             self.application.game.Cplayer.boat3.Fuel = 5
-                            self.application.game.Cplayer.boat1.AttPoints = 1
+                            self.application.game.Cplayer.boat1.AttPoints = 10
                             self.application.game.Cplayer.boat2.AttPoints = 1
                             self.application.game.Cplayer.boat3.AttPoints = 1
                             self.application.game.GunboatMovement = False
@@ -1127,7 +1127,7 @@ class Tutorial:
 
         self.back_to_menu = Button(self.application, ("Back to menu"), (width/15), (height/1.25), 205, 40)
         self.back_to_game = Button(self.application, ("Back to game / start game"), (width/15), (height/1.4), 205, 40)
-        self.previous = Button(self.application, ("Previous"), (width/15), (height/1.55), 205, 40)
+        self.previous = Button(self.application, ("Previous"), (width/15), (height/1.55), 150, 40)
         self.next = Button(self.application, ("Next"), (width/5), (height/1.55), 205, 40)
 
     def load_tutorial_panels(self):
@@ -1256,6 +1256,12 @@ class Reset:
         self.application.game.player2.boat1.LifePoints = 5
         self.application.game.player2.boat2.LifePoints = 4
         self.application.game.player2.boat3.LifePoints = 3
+        self.application.game.player1.boat1.Mode = 'Att'
+        self.application.game.player1.boat2.Mode = 'Att'
+        self.application.game.player1.boat3.Mode = 'Att'
+        self.application.game.player2.boat1.Mode = 'Att'
+        self.application.game.player2.boat2.Mode = 'Att'
+        self.application.game.player2.boat3.Mode = 'Att'
         self.application.game.player1.boat1.width = 453
         self.application.game.player1.boat2.width = 490     
         self.application.game.player1.boat3.width = 258
