@@ -16,7 +16,7 @@ class Application:
         self.VicSound = pygame.mixer.Sound('BurkeBlack.wav')
         pygame.mixer.music.load('BGM.wav')
 
-        self.screen = pygame.display.set_mode((self.size), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.size))#, pygame.FULLSCREEN)
         self.phase = "intro"
         self.intro = Intro(self, self.width, self.height)
         self.game = Game(self, self.width, self.height)
@@ -217,7 +217,7 @@ class Button:
                 for event in self.application.events:
                     if event.type == MOUSEBUTTONDOWN:
                         print (self.text)
-                        if self.text == 'Replay':
+                        if self.text == 'Play again':
                             self.reset.reset()
                             self.application.phase = "game"
                         elif self.text == "Back to menu":
@@ -1190,7 +1190,7 @@ class Victory:
         self.font = pygame.font.SysFont('Arial', 150)
         self.font2 = pygame.font.SysFont('Arial',50)
         self.back_to_menu_button = Button(self.application, 'Back to menu', (width/15), (height/1.25), 170, 50)
-        self.replay_button = Button(self.application, 'Replay', (width/15), (height/1.4), 170, 50)
+        self.play_again_button = Button(self.application, 'Play again', (width/15), (height/1.4), 170, 50)
 
     def draw (self, screen):
         screen.blit(self.Background,(0, 0))
@@ -1199,7 +1199,7 @@ class Victory:
         screen.blit(title_text,((self.width / 15) , (self.height / 9)))
         screen.blit(victory_text,((self.width / 15) , (self.height / 2.8)))
         self.back_to_menu_button.mouse_action(screen)
-        self.replay_button.mouse_action(screen)
+        self.play_again_button.mouse_action(screen)
 
 class Database:
     def __init__(self, application, width, height):
